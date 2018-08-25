@@ -547,11 +547,11 @@ if (typeof NProgress != 'undefined') {
 		};
         
 		
-        if ($("#chart_plot_01").length){
-			console.log('Plot1');
+    //     if ($("#chart_plot_01").length){
+		// 	console.log('Plot1');
 			
-			$.plot( $("#chart_plot_01"), [ arr_data1, arr_data2 ],  chart_plot_01_settings );
-		}
+		// 	$.plot( $("#chart_plot_01"), [ arr_data1, arr_data2 ],  chart_plot_01_settings );
+		// }
 		
 		
 		if ($("#chart_plot_02").length){
