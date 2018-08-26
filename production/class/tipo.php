@@ -120,6 +120,7 @@ class Tipo{
         try {
             $obj= json_decode($_POST["listaIds"],true);
             $eventArray= [];
+            $componente= [];
             foreach ($obj as $item) {    
                 $evento = new varEvents();            
                 $sql='SELECT id, nombre, alto, bajo, unidad
@@ -128,21 +129,25 @@ class Tipo{
                 $param= array(':id'=>$item);
                 $data= DATA::Ejecutar($sql,$param);     
                 if(count($data)){
-                    //$tipo->id = $data[0]['id'];
-                    //$tipo->nombre = $data[0]['nombre'];
+                    $tipo = new Tipo();
+                    $tipo->id = $data[0]['id'];
+                    $tipo->nombre = $data[0]['nombre'];
                     $evento->label = $data[0]['nombre'];
-                    //$tipo->bajo = $data[0]['bajo'];
-                    //$tipo->alto = $data[0]['alto'];
-                    //$tipo->unidad = $data[0]['unidad'];
-                    //$tipo->label = $data[0]['nombre'];
+                    $tipo->bajo = $data[0]['bajo'];
+                    $tipo->alto = $data[0]['alto'];
+                    $tipo->unidad = $data[0]['unidad'];
+                    $tipo->label = $data[0]['nombre'];
                     // productos x tipo.
                     $evento->data= Monitoreo::read($item);
                     //
                     array_push ($eventArray, $evento);
+                    array_push ($componente, $tipo);
                 }                
             }
+            $consulta= [];
+            array_push ($consulta, $tipo, $eventArray);
             //            
-            return $eventArray;
+            return $consulta;
         }     
         catch(Exception $e) {
             header('HTTP/1.0 400 Bad error');

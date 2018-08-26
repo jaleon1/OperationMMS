@@ -736,85 +736,85 @@ if (typeof NProgress != 'undefined') {
 	   
 	}
 	   
-	function init_gauge() {
+	// function init_gauge() {
 			
-		if( typeof (Gauge) === 'undefined'){ return; }
+	// 	if( typeof (Gauge) === 'undefined'){ return; }
 		
-		console.log('init_gauge [' + $('.gauge-chart').length + ']');
+	// 	console.log('init_gauge [' + $('.gauge-chart').length + ']');
 		
-		console.log('init_gauge');
+	// 	console.log('init_gauge');
 		
 
-		  var chart_gauge_settings = {
-		  lines: 12,
-		  angle: 0,
-		  lineWidth: 0.4,
-		  pointer: {
-			  length: 0.75,
-			  strokeWidth: 0.042,
-			  color: '#1D212A'
-		  },
-		  limitMax: 'false',
-		  colorStart: '#1ABC9C',
-		  colorStop: '#1ABC9C',
-		  strokeColor: '#F0F3F3',
-		  generateGradient: true
-	  };
+	// 	  var chart_gauge_settings = {
+	// 	  lines: 12,
+	// 	  angle: 0,
+	// 	  lineWidth: 0.4,
+	// 	  pointer: {
+	// 		  length: 0.75,
+	// 		  strokeWidth: 0.042,
+	// 		  color: '#1D212A'
+	// 	  },
+	// 	  limitMax: 'false',
+	// 	  colorStart: '#1ABC9C',
+	// 	  colorStop: '#1ABC9C',
+	// 	  strokeColor: '#F0F3F3',
+	// 	  generateGradient: true
+	//   };
 		
 		
-		if ($('#chart_gauge_01').length){ 
+	// 	if ($('#chart_gauge_01').length){ 
 		
-			var chart_gauge_01_elem = document.getElementById('chart_gauge_01');
-			var chart_gauge_01 = new Gauge(chart_gauge_01_elem).setOptions(chart_gauge_settings);
+	// 		var chart_gauge_01_elem = document.getElementById('chart_gauge_01');
+	// 		var chart_gauge_01 = new Gauge(chart_gauge_01_elem).setOptions(chart_gauge_settings);
 			
-		}	
+	// 	}	
 		
 		
-		if ($('#gauge-text').length){ 
+	// 	if ($('#gauge-text').length){ 
 		
-			chart_gauge_01.maxValue = 6000;
-			chart_gauge_01.animationSpeed = 32;
-			chart_gauge_01.set(3200);
-			chart_gauge_01.setTextField(document.getElementById("gauge-text"));
+	// 		chart_gauge_01.maxValue = 6000;
+	// 		chart_gauge_01.animationSpeed = 32;
+	// 		chart_gauge_01.set(3200);
+	// 		chart_gauge_01.setTextField(document.getElementById("gauge-text"));
 		
-		}
+	// 	}
 
-		if ($('#chart_gauge_b').length){ 
+	// 	if ($('#chart_gauge_b').length){ 
 		
-			var chart_gauge_b_elem = document.getElementById('chart_gauge_b');
-			var chart_gauge_b = new Gauge(chart_gauge_b_elem).setOptions(chart_gauge_settings);
+	// 		var chart_gauge_b_elem = document.getElementById('chart_gauge_b');
+	// 		var chart_gauge_b = new Gauge(chart_gauge_b_elem).setOptions(chart_gauge_settings);
 			
-		}	
+	// 	}	
 		
 		
-		if ($('#gauge-text').length){ 
+	// 	if ($('#gauge-text').length){ 
 		
-			chart_gauge_b.maxValue = 6000;
-			chart_gauge_b.animationSpeed = 32;
-			chart_gauge_b.set(3200);
-			chart_gauge_b.setTextField(document.getElementById("gauge-text"));
+	// 		chart_gauge_b.maxValue = 6000;
+	// 		chart_gauge_b.animationSpeed = 32;
+	// 		chart_gauge_b.set(3200);
+	// 		chart_gauge_b.setTextField(document.getElementById("gauge-text"));
 		
-		}
+	// 	}
 		
-		if ($('#chart_gauge_02').length){
+	// 	if ($('#chart_gauge_02').length){
 		
-			var chart_gauge_02_elem = document.getElementById('chart_gauge_02');
-			var chart_gauge_02 = new Gauge(chart_gauge_02_elem).setOptions(chart_gauge_settings);
+	// 		var chart_gauge_02_elem = document.getElementById('chart_gauge_02');
+	// 		var chart_gauge_02 = new Gauge(chart_gauge_02_elem).setOptions(chart_gauge_settings);
 			
-		}
+	// 	}
 		
 		
-		if ($('#gauge-text2').length){
+	// 	if ($('#gauge-text2').length){
 			
-			chart_gauge_02.maxValue = 9000;
-			chart_gauge_02.animationSpeed = 32;
-			chart_gauge_02.set(2400);
-			chart_gauge_02.setTextField(document.getElementById("gauge-text2"));
+	// 		chart_gauge_02.maxValue = 9000;
+	// 		chart_gauge_02.animationSpeed = 32;
+	// 		chart_gauge_02.set(2400);
+	// 		chart_gauge_02.setTextField(document.getElementById("gauge-text2"));
 		
-		}
+	// 	}
 	
 	
-	}   
+	// }   
 	   	   
 	/* SPARKLINES */
 			
@@ -5049,7 +5049,7 @@ if (typeof NProgress != 'undefined') {
 		init_validator();
 		init_DataTables();
 		init_chart_doughnut();
-		init_gauge();
+		//init_gauge();
 		init_PNotify();
 		init_starrr();
 		init_calendar();
