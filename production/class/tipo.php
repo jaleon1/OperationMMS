@@ -39,18 +39,24 @@ if(isset($_POST["action"])){
     }
 }
 
+class varEvents{
+    public $data= [];
+    public $label='';
+}
+
 class Tipo{
     public $id=null;
+    //public $label='';
     public $nombre='';
     public $unidad=null;
     public $alto='';
     public $bajo=null;
     public $lista= [];
-
+    //
     function __construct(){
         // identificador único
         if(isset($_POST["id"])){
-            $this->id= $_POST["id"];
+            //$this->id= $_POST["id"];
         }
         // if(isset($_POST["inicio"])){
         //     $this->id= $_POST["inicio"];
@@ -112,23 +118,31 @@ class Tipo{
 
     function readEvents(){
         try {
-            $sql='SELECT id, nombre, alto, bajo, unidad
+            $obj= json_decode($_POST["listaIds"],true);
+            $eventArray= [];
+            foreach ($obj as $item) {    
+                $evento = new varEvents();            
+                $sql='SELECT id, nombre, alto, bajo, unidad
                 FROM tipo
                 WHERE id= :id';
-            $param= array(':id'=>$this->id);
-            $data= DATA::Ejecutar($sql,$param);     
-            if(count($data)){
-                $this->id = $data[0]['id'];
-                $this->nombre = $data[0]['nombre'];
-                $this->bajo = $data[0]['bajo'];
-                $this->alto = $data[0]['alto'];
-                $this->unidad = $data[0]['unidad'];
-                // productos x tipo.
-                $this->lista= Monitoreo::read($this->id);
-                //
-                return $this;
+                $param= array(':id'=>$item);
+                $data= DATA::Ejecutar($sql,$param);     
+                if(count($data)){
+                    //$tipo->id = $data[0]['id'];
+                    //$tipo->nombre = $data[0]['nombre'];
+                    $evento->label = $data[0]['nombre'];
+                    //$tipo->bajo = $data[0]['bajo'];
+                    //$tipo->alto = $data[0]['alto'];
+                    //$tipo->unidad = $data[0]['unidad'];
+                    //$tipo->label = $data[0]['nombre'];
+                    // productos x tipo.
+                    $evento->data= Monitoreo::read($item);
+                    //
+                    array_push ($eventArray, $evento);
+                }                
             }
-            else return null;
+            //            
+            return $eventArray;
         }     
         catch(Exception $e) {
             header('HTTP/1.0 400 Bad error');
