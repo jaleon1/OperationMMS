@@ -42,17 +42,21 @@ class Tipo {
 
     get readEvents() {
         var miAccion = 'readEvents';
-        this.id= 5;
+        var listaIds= $('#tipo option:selected').map(function () { return this.value; }).get();
         $.ajax({
             type: "POST",
             url: "class/tipo.php",
             data: {
                 action: miAccion,
-                id: this.id
+                listaIds: JSON.stringify(listaIds)
             }
         })
             .done(function (e) {
                 tipo.showEvents(e);
+                setTimeout(
+                        tipo.readEvents,
+                        500000
+                    );
             })
             .fail(function (e) {
                 tipo.showError(e);
@@ -181,15 +185,19 @@ class Tipo {
     };
 
     showEvents(e){
-        //var data = JSON.parse(e);
-        var d3 = [[0, 17], [2, 15], [4,16], [6, 14], [8, 18]];
-        var d4 = [[0, 15], [2, 10], [4,8],  [6, 6], [8, 13]];
-        var d5 = [[0, 25], [2, 20], [4,25],  [6, 20], [8, 25]];
-        var data = [];
-        if ($("#chart_plot_01").length) {
-            $.plot($("#chart_plot_01"), [d3, d4, d5], chart_plot_01_settings);
-        }
+        var series = JSON.parse(e);
+		if ($("#chart_plot_01").length) {
+            plot= $.plot($("#chart_plot_01"),  series,
+                chart_plot_01_settings
+            );
+		}
     };
+
+    // update() {
+    //     plot.setData([series]);
+    //     plot.draw();
+    //     setTimeout(update, 5000);
+    // };
 
     // Muestra información en ventana
     showInfo() {
@@ -430,6 +438,16 @@ class Tipo {
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
         });
+        //
+        // tipo.id= $('#tipo').val();
+        // $('#tipo').change(function(){
+        //     tipo.id=this.value;
+        //     //tipo.readEvents;
+        // });
+        $('#btnIniciar').click(function(){
+            //tipo.id=this.value;
+            tipo.readEvents;
+        });
         // configuracion del plot
         chart_plot_01_settings = {
             series: {
@@ -439,7 +457,7 @@ class Tipo {
             },
             splines: {
                 show: true,
-                tension: 0.4,
+                tension: 0.1,
                 lineWidth: 1,
                 fill: 0.4
             },
@@ -450,33 +468,42 @@ class Tipo {
             shadowSize: 2
             },
             grid: {
-            verticalLines: true,
-            hoverable: true,
-            clickable: true,
-            tickColor: "#d5d5d5",
-            borderWidth: 1,
-            color: '#fff'
+                verticalLines: true,
+                hoverable: true,
+                clickable: true,
+                tickColor: "#d5d5d5",
+                borderWidth: 1,
+                color: '#fff'
             },
             colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)"],
             xaxis: {
-            tickColor: "rgba(51, 51, 51, 0.06)",
-            mode: "time",
-            tickSize: [1, "day"],
-            //tickLength: 10,
-            axisLabel: "Date",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10
+                tickColor: "rgba(51, 51, 51, 0.06)",
+                mode: "time",
+                tickSize: [1, "second"],
+                tickLength: 10,
+                axisLabel: "Fq",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 10
             },
             yaxis: {
-            ticks: 8,
-            tickColor: "rgba(51, 51, 51, 0.06)",
+                ticks: 8,
+                tickColor: "rgba(51, 51, 51, 0.06)",
+                display: true,
             },
-            tooltip: true
+            tooltip: true,
+            zoom: {
+				interactive: true
+			},
+			pan: {
+				interactive: true
+			}
         }
 
     };
 }
+var series;
+var plot;
 var chart_plot_01_settings;
 let tipo = new Tipo();

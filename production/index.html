@@ -26,7 +26,7 @@
   <link href="../../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
   <!-- bootstrap-daterangepicker -->
   <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
+  <link href="css/bootstrap-select.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="../build/css/custom.min.css" rel="stylesheet">
 </head>
@@ -68,8 +68,9 @@
                 </li>
                 <li><a><i class="fa fa-edit"></i> MMS<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
-                    <li><a href="form.html">Componente</a></li>
+                    <li><a href="form.html">Nuevo Componente</a></li>                    
                     <li><a href="tables.html">Historial</a></li>
+                    <li><a href="form.html">Lista de Componentes</a></li>
                   </ul>
                 </li>
                 <li><a><i class="fa fa-desktop"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
@@ -226,15 +227,39 @@
 
               <div class="row x_title">
                 <div class="col-md-6">
-                  <h3>Alarmas Reportadas <small>Trafico Mensual</small></h3>
+                  <h3>Condicion de Energía <small>Variables</small></h3>
                 </div>
+                                
                 <div class="col-md-6">
                   <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
                     <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                     <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
                   </div>
                 </div>
+
+                <div class="item form-group">
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <select class="selectpicker show-menu-arrow form-control" multiple id="tipo" name="tipo">
+                            <option value="1">Frecuencia</option>
+                            <option value="2" >Corriente Fase R</option>
+                            <option value="3" >Corriente Fase S</option>
+                            <option value="4" >Corriente Fase T</option>
+                            <option value="5" selected>Factor Potencia Fase R</option>
+                            <option value="6" >Factor Potencia Fase S</option>
+                            <option value="7" >Factor Potencia Fase T</option>                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <button id="btnIniciar" type="button" class="btn btn-success">Iniciar</button>
+                    </div>
+                </div>
+
               </div>
+              
+              
 
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <div id="chart_plot_01" class="demo-placeholder"></div>
@@ -817,9 +842,12 @@
   <script src="../../vendors/Flot/jquery.flot.time.js"></script>
   <script src="../../vendors/Flot/jquery.flot.stack.js"></script>
   <script src="../../vendors/Flot/jquery.flot.resize.js"></script>
+  <script src="js/jquery.flot.selection.js" ></script>
+  <script src="js/jquery.flot.navigate.js" ></script>
   <!-- Flot plugins -->
   <script src="../../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
   <script src="../../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+
   <script src="../../vendors/flot.curvedlines/curvedLines.js"></script>
   <!-- DateJS -->
   <script src="../../vendors/DateJS/build/date.js"></script>
@@ -834,6 +862,7 @@
   <!-- JS  -->
   <script src="js/monitoreo.js"></script>
   <script src="js/tipo.js"></script>
+  <script src="js/bootstrap-select.js"></script>
 
   <!-- Custom Theme Scripts -->
   <script src="../build/js/custom.js"></script>
@@ -845,7 +874,7 @@
 <script>
   $(document).ready(function () {
     tipo.Init();
-    tipo.readEvents;
+    //tipo.readEvents;
 
     // var arr_data1 = [
 		// 	[gd(2012, 1, 1), 17],

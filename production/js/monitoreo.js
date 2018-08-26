@@ -401,6 +401,8 @@ class Monitoreo {
                 .ajaxStop(NProgress.done);
         });
 
+        
+
     };
 }
 
