@@ -216,41 +216,47 @@ class Tipo {
         // ultima toma
         ts= series[0];
         // debe recorrer los componentes seleccionados y desplegar los rangos, el % de cambio y el gauge.
-        $.each(data, function (i, item) {
-            $.each(item, function (i, comp) {
+        $.each(data[0], function (i, item) {
+            //$.each(item, function (i, comp) {
                 // componente
                 //tipo= new Tipo(comp.id, comp.nombre, comp.unidad, comp.alto, comp.bajo);
                 // última medición.    
-                ts= moment().unix(comp.lasq);        
-                var ultima= comp[item.length-1]; 
-                var pMedicion= ultima/comp.max*100;
+                //ts= moment().unix(item.lasq);        
+                var ultima= 0.90;//comp[item.length-1]; 
+                var pMedicion= ultima/item.alto*100;
                 // rangos
-                if (i==0)
-                    var range=  $("#range_paramA");
-                if (i==1)
-                    var range=  $("#range_paramB");
-                if (i==2)
-                    var range=  $("#range_paramC");
-               range.ionRangeSlider({
+                if (i==0){
+                    var range=  $("#range_paramA").data("ionRangeSlider");
+                }
+                else if (i==1)
+                    var range=  $("#range_paramB").data("ionRangeSlider");
+                else if (i==2)
+                    var range=  $("#range_paramC").data("ionRangeSlider");
+               //range.reset();
+               range.update({
                     type: "double",
                     min: 0,
-                    max: 1,
-                    from: comp.bajo,
-                    to: comp.alto,
+                    max: 1.2,
+                    from: parseFloat(item.bajo),
+                    to: parseFloat(item.alto),
                     step: 0.1,
                     grid: true,
                     grid_snap: true
-                });	
+                });
                 // actualiza control.
                 var chart_gauge_elem;
                 if (i==0)
                     chart_gauge_elem = document.getElementById('chart_gauge_a');
+                else if (i==1)
+                    chart_gauge_elem = document.getElementById('chart_gauge_b');
+                else if (i==2)
+                    chart_gauge_elem = document.getElementById('chart_gauge_c');
                 var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
                 chart_gauge.maxValue = 100;
-                chart_gauge.animationSpeed = 32;
+                chart_gauge.animationSpeed = 10;
                 chart_gauge.set(pMedicion);
                 chart_gauge.setTextField(document.getElementById("gauge-text"));   
-            });
+            //});
         });
 
         // pendiente por hacer la consulta filtrada por fechas usando el control de fechas: reportrange.
@@ -599,26 +605,27 @@ class Tipo {
             strokeColor: '#F0F3F3',
             generateGradient: true
         };
+        //
         var chart_gauge_elem = document.getElementById('chart_gauge_a');
         var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
         chart_gauge.maxValue = 100;
         chart_gauge.animationSpeed = 32;
-        chart_gauge.set(90);
+        chart_gauge.set(0);
         chart_gauge.setTextField(document.getElementById("gauge-text"));
-        
-//         chart_gauge_elem = document.getElementById('chart_gauge_b');
-//         chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
-//         chart_gauge.maxValue = 100;
-//         chart_gauge.animationSpeed = 32;
-//         chart_gauge.set(50);
-//         chart_gauge.setTextField(document.getElementById("gauge-text"));
-//         //
-//         chart_gauge_elem = document.getElementById('chart_gauge_c');
-//         chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
-//         chart_gauge.maxValue = 100;
-//         chart_gauge.animationSpeed = 32;
-//         chart_gauge.set(20);
-//         chart_gauge.setTextField(document.getElementById("gauge-text"));
+        //
+        chart_gauge_elem = document.getElementById('chart_gauge_b');
+        chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+        chart_gauge.maxValue = 100;
+        chart_gauge.animationSpeed = 32;
+        chart_gauge.set(0);
+        chart_gauge.setTextField(document.getElementById("gauge-text"));
+        //
+        chart_gauge_elem = document.getElementById('chart_gauge_c');
+        chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+        chart_gauge.maxValue = 100;
+        chart_gauge.animationSpeed = 32;
+        chart_gauge.set(0);
+        chart_gauge.setTextField(document.getElementById("gauge-text"));
         //configuracion del plot
         chart_plot_01_settings = {
             series: {
@@ -673,27 +680,36 @@ class Tipo {
         }
         if( typeof ($.fn.ionRangeSlider) === 'undefined'){ return; }
         //console.log('init_IonRangeSlider');
-        
-//         $("#range_paramB").ionRangeSlider({
-//             type: "double",
-//             min: 0.6,
-//             max: 1.2,
-//             from: 0.8,
-//             to: 1,
-//             step: 0.1,
-//             grid: true,
-//             grid_snap: true
-//         });	
-//         $("#range_paramC").ionRangeSlider({
-//             type: "double",
-//             min: 0.6,
-//             max: 1.2,
-//             from: 0.8,
-//             to: 1,
-//             step: 0.1,
-//             grid: true,
-//             grid_snap: true
-//         });	
+        $("#range_paramA").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 0,
+            from: 0,
+            to: 0,
+            step: 0,
+            grid: true,
+            grid_snap: true
+        });	
+        $("#range_paramB").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 0,
+            from: 0,
+            to: 0,
+            step: 0,
+            grid: true,
+            grid_snap: true
+        });	
+        $("#range_paramC").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 0,
+            from: 0,
+            to: 0,
+            step: 0,
+            grid: true,
+            grid_snap: true
+        });	
 
     };
 }

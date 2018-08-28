@@ -141,7 +141,7 @@ class Tipo{
                     // productos x tipo.
                     $evento->data= Monitoreo::read($item);
                     // ultima consulta de la variable
-                    //$tipo->lastq = $_SESSION['lastq'];
+                    $tipo->ultMedicion= $_SESSION['ultMedicion'];
                     //
                     array_push ($eventArray, $evento);
                     array_push ($componente, $tipo);
