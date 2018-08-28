@@ -8,6 +8,7 @@ class Monitoreo{
     //
     public static function read($id){
         try{
+            self::fakeData();
             $sql="SELECT medicion, fecha
                 FROM cm4000_8 
                 WHERE id= :id
@@ -26,6 +27,20 @@ class Monitoreo{
                 $i++;
             }
             return $lista;
+        }
+        catch(Exception $e) {
+            return false;
+        }
+    }
+
+    private static function fakeData(){
+        try{
+            $sql="CALL loopx();";
+            //$param= array(':mid'=>$id, ':ncantidad'=>$ncantidad);
+            $data = DATA::Ejecutar($sql);
+            // if($data)
+            //     return true;
+            // else throw new Exception('error al ejecutar.', 123);
         }
         catch(Exception $e) {
             return false;
