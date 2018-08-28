@@ -51,6 +51,7 @@ class Tipo{
     public $unidad=null;
     public $alto='';
     public $bajo=null;
+    public $lastq=null;
     public $lista= [];
     //
     function __construct(){
@@ -121,7 +122,7 @@ class Tipo{
             $obj= json_decode($_POST["listaIds"],true);
             $eventArray= [];
             $componente= [];
-            foreach ($obj as $item) {    
+            foreach ($obj as $item) {
                 $evento = new varEvents();            
                 $sql='SELECT id, nombre, alto, bajo, unidad
                 FROM tipo
@@ -139,13 +140,15 @@ class Tipo{
                     $tipo->label = $data[0]['nombre'];
                     // productos x tipo.
                     $evento->data= Monitoreo::read($item);
+                    // ultima consulta de la variable
+                    //$tipo->lastq = $_SESSION['lastq'];
                     //
                     array_push ($eventArray, $evento);
                     array_push ($componente, $tipo);
                 }                
             }
             $consulta= [];
-            array_push ($consulta, $tipo, $eventArray);
+            array_push ($consulta, $componente, $eventArray);
             //            
             return $consulta;
         }     

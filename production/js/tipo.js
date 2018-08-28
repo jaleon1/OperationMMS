@@ -43,20 +43,44 @@ class Tipo {
     get readEvents() {
         var miAccion = 'readEvents';
         var listaIds= $('#tipo option:selected').map(function () { return this.value; }).get();
+        ts =  moment().unix(); // timestamp actual
         $.ajax({
             type: "POST",
             url: "class/tipo.php",
             data: {
                 action: miAccion,
-                listaIds: JSON.stringify(listaIds)
+                listaIds: JSON.stringify(listaIds),
+                ts: ts
             }
         })
             .done(function (e) {
                 tipo.showEvents(e);
-                rt = setTimeout(function(){ tipo.readEvents; }, 3000);
+                rt = setTimeout(function(){ tipo.readEvents; }, 2000);
             })
             .fail(function (e) {
-                tipo.showError(e);
+                //tipo.showError(e);
+            });
+    }
+
+    get readEventsRT() {
+        var miAccion = 'readEvents';
+        var listaIds= $('#tipo option:selected').map(function () { return this.value; }).get();
+        
+        $.ajax({
+            type: "POST",
+            url: "class/tipo.php", 
+            data: {
+                action: miAccion,
+                listaIds: JSON.stringify(listaIds),
+                ts: ts
+            }
+        })
+            .done(function (e) {
+                tipo.updateEvents(e);
+                rt = setTimeout(function(){ tipo.readEventsRT; }, 2000);
+            })
+            .fail(function (e) {
+                //tipo.showError(e);
             });
     }
 
@@ -181,16 +205,125 @@ class Tipo {
         else this.ShowItemData(e);
     };
 
-    showEvents(e){        
+    showEvents(e){
         var data = JSON.parse(e);
-        var series = data[1]; // event array.
-		if ($("#chart_plot_01").length) {
+        series = data[1]; // event array.
+        if ($("#chart_plot_01").length) {
             plot= $.plot($("#chart_plot_01"),  series,
                 chart_plot_01_settings
             );
-        }
+        }        
+        // ultima toma
+        ts= series[0];
         // debe recorrer los componentes seleccionados y desplegar los rangos, el % de cambio y el gauge.
+        $.each(data, function (i, item) {
+            $.each(item, function (i, comp) {
+                // componente
+                //tipo= new Tipo(comp.id, comp.nombre, comp.unidad, comp.alto, comp.bajo);
+                // última medición.    
+                ts= moment().unix(comp.lasq);        
+                var ultima= comp[item.length-1]; 
+                var pMedicion= ultima/comp.max*100;
+                // rangos
+                if (i==0)
+                    var range=  $("#range_paramA");
+                if (i==1)
+                    var range=  $("#range_paramB");
+                if (i==2)
+                    var range=  $("#range_paramC");
+               range.ionRangeSlider({
+                    type: "double",
+                    min: 0,
+                    max: 1,
+                    from: comp.bajo,
+                    to: comp.alto,
+                    step: 0.1,
+                    grid: true,
+                    grid_snap: true
+                });	
+                // actualiza control.
+                var chart_gauge_elem;
+                if (i==0)
+                    chart_gauge_elem = document.getElementById('chart_gauge_a');
+                var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+                chart_gauge.maxValue = 100;
+                chart_gauge.animationSpeed = 32;
+                chart_gauge.set(pMedicion);
+                chart_gauge.setTextField(document.getElementById("gauge-text"));   
+            });
+        });
 
+        // pendiente por hacer la consulta filtrada por fechas usando el control de fechas: reportrange.
+
+
+        // actualemente el gráfico trae toda las filas de la tabla, falta un método que traiga solo la última medición y actualice los gráficos.
+
+    };
+
+    updateEvents(e){
+        var data = JSON.parse(e);
+        var nuevaSerie = data[1];
+        var tam = nuevaSerie[0].data.length;
+        if(tam==0) return;
+        //
+        //series[0].data = series[0].data.slice(tam);
+        //series[0].data= series[0].data.concat(nuevaSerie[0].data);         
+        $.each(nuevaSerie[0].data, function (i, item) {
+            //series[0].data = series[0].data.slice(1);
+            //if(series[0].data.length>1 )
+            series[0].data = series[0].data.slice(1);
+            var res = [];
+			$.each(series[0].data, function (i, x) {
+				res.push([i, x[1]])
+			});
+            res.push([res.length, item[1]]);
+            series[0].data= res;
+            //
+            plot.setData(series);
+            //plot.setupGrid();
+            plot.draw();
+            setTimeout(function(){
+                    var a=0;                   
+                 }, 100);
+//             plot= $.plot($("#chart_plot_01"),  series,
+//                 chart_plot_01_settings
+//             );            
+        });
+        // debe recorrer los componentes seleccionados y desplegar los rangos, el % de cambio y el gauge.
+        $.each(data, function (i, item) {
+            $.each(item, function (i, comp) {
+                // componente
+                //tipo= new Tipo(comp.id, comp.nombre, comp.unidad, comp.alto, comp.bajo);
+                // última medición.     
+                ts= moment().unix(comp.lasq);  
+                var ultima= comp[item.length-1]; 
+                var pMedicion= ultima/tipo.max*100;
+                // rangos
+                if (i==0)
+                    var range=  $("#range_paramA");
+               range.ionRangeSlider({
+                    type: "double",
+                    min: 0.6,
+                    max: 1.2,
+                    from: comp.bajo,
+                    to: comp.alto,
+                    step: 0.1,
+                    grid: true,
+                    grid_snap: true
+                });	
+                // actualiza control.
+//                 var chart_gauge_elem;
+//                 if (i==0)
+//                     chart_gauge_elem = document.getElementById('chart_gauge_a');
+//                 var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+//                 chart_gauge.maxValue = 100;
+//                 chart_gauge.animationSpeed = 32;
+//                 chart_gauge.set(pMedicion);
+//                 chart_gauge.setTextField(document.getElementById("gauge-text"));   
+
+
+            });
+        });
 
         // pendiente por hacer la consulta filtrada por fechas usando el control de fechas: reportrange.
 
@@ -444,14 +577,14 @@ class Tipo {
         //     //tipo.readEvents;
         // });
         $('#btnIniciar').click(function(){
-            //tipo.id=this.value;
             tipo.readEvents;
+            //rt= true;
         });
         $('#btnDetener').click(function(){
             clearTimeout(rt);
         });
         // gauge
-        var chart_gauge_settings = {
+        chart_gauge_settings = {
             lines: 12,
             angle: 0,
             lineWidth: 0.4,
@@ -472,21 +605,21 @@ class Tipo {
         chart_gauge.animationSpeed = 32;
         chart_gauge.set(90);
         chart_gauge.setTextField(document.getElementById("gauge-text"));
-        //
-        chart_gauge_elem = document.getElementById('chart_gauge_b');
-        chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
-        chart_gauge.maxValue = 100;
-        chart_gauge.animationSpeed = 32;
-        chart_gauge.set(50);
-        chart_gauge.setTextField(document.getElementById("gauge-text"));
-        //
-        chart_gauge_elem = document.getElementById('chart_gauge_c');
-        chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
-        chart_gauge.maxValue = 100;
-        chart_gauge.animationSpeed = 32;
-        chart_gauge.set(20);
-        chart_gauge.setTextField(document.getElementById("gauge-text"));
-        // configuracion del plot
+        
+//         chart_gauge_elem = document.getElementById('chart_gauge_b');
+//         chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+//         chart_gauge.maxValue = 100;
+//         chart_gauge.animationSpeed = 32;
+//         chart_gauge.set(50);
+//         chart_gauge.setTextField(document.getElementById("gauge-text"));
+//         //
+//         chart_gauge_elem = document.getElementById('chart_gauge_c');
+//         chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
+//         chart_gauge.maxValue = 100;
+//         chart_gauge.animationSpeed = 32;
+//         chart_gauge.set(20);
+//         chart_gauge.setTextField(document.getElementById("gauge-text"));
+        //configuracion del plot
         chart_plot_01_settings = {
             series: {
             lines: {
@@ -540,41 +673,34 @@ class Tipo {
         }
         if( typeof ($.fn.ionRangeSlider) === 'undefined'){ return; }
         //console.log('init_IonRangeSlider');
-        $("#range_paramA").ionRangeSlider({
-            type: "double",
-            min: 0.6,
-            max: 1.2,
-            from: 0.8,
-            to: 1,
-            step: 0.1,
-            grid: true,
-            grid_snap: true
-        });	
-        $("#range_paramB").ionRangeSlider({
-            type: "double",
-            min: 0.6,
-            max: 1.2,
-            from: 0.8,
-            to: 1,
-            step: 0.1,
-            grid: true,
-            grid_snap: true
-        });	
-        $("#range_paramC").ionRangeSlider({
-            type: "double",
-            min: 0.6,
-            max: 1.2,
-            from: 0.8,
-            to: 1,
-            step: 0.1,
-            grid: true,
-            grid_snap: true
-        });	
+        
+//         $("#range_paramB").ionRangeSlider({
+//             type: "double",
+//             min: 0.6,
+//             max: 1.2,
+//             from: 0.8,
+//             to: 1,
+//             step: 0.1,
+//             grid: true,
+//             grid_snap: true
+//         });	
+//         $("#range_paramC").ionRangeSlider({
+//             type: "double",
+//             min: 0.6,
+//             max: 1.2,
+//             from: 0.8,
+//             to: 1,
+//             step: 0.1,
+//             grid: true,
+//             grid_snap: true
+//         });	
 
     };
 }
-var rt;
+var rt= false;
+var ts;
 var series;
 var plot;
+var chart_gauge_settings;
 var chart_plot_01_settings;
 let tipo = new Tipo();

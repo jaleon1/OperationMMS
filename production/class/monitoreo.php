@@ -21,7 +21,8 @@ class Monitoreo{
                 // $monitoreo->fecha = $value['fecha'];
                 // $monitoreo->medicion = $value['medicion'];                
                 //array_push ($lista, [$value['fecha'], floatval($value['medicion'])]);
-                array_push ($lista, [$i, floatval($value['medicion'])]);
+                // $_SESSION['lastq']= $value['fecha'];
+                array_push ($lista, [ $i, floatval($value['medicion'])]);
                 $i++;
             }
             return $lista;
