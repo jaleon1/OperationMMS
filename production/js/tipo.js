@@ -217,46 +217,77 @@ class Tipo {
         ts= series[0];
         // debe recorrer los componentes seleccionados y desplegar los rangos, el % de cambio y el gauge.
         $.each(data[0], function (i, item) {
-            //$.each(item, function (i, comp) {
-                // componente
-                //tipo= new Tipo(comp.id, comp.nombre, comp.unidad, comp.alto, comp.bajo);
-                // última medición.    
-                //ts= moment().unix(item.lasq);        
-                var ultima= 0.90;//comp[item.length-1]; 
-                var pMedicion= ultima/item.alto*100;
-                // rangos
-                if (i==0){
-                    var range=  $("#range_paramA").data("ionRangeSlider");
-                }
-                else if (i==1)
-                    var range=  $("#range_paramB").data("ionRangeSlider");
-                else if (i==2)
-                    var range=  $("#range_paramC").data("ionRangeSlider");
-               //range.reset();
-               range.update({
-                    type: "double",
-                    min: 0,
-                    max: 1.2,
-                    from: parseFloat(item.bajo),
-                    to: parseFloat(item.alto),
-                    step: 0.1,
-                    grid: true,
-                    grid_snap: true
-                });
-                // actualiza control.
-                var chart_gauge_elem;
-                if (i==0)
-                    chart_gauge_elem = document.getElementById('chart_gauge_a');
-                else if (i==1)
-                    chart_gauge_elem = document.getElementById('chart_gauge_b');
-                else if (i==2)
-                    chart_gauge_elem = document.getElementById('chart_gauge_c');
-                var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
-                chart_gauge.maxValue = 100;
-                chart_gauge.animationSpeed = 10;
-                chart_gauge.set(pMedicion);
-                chart_gauge.setTextField(document.getElementById("gauge-text"));   
-            //});
+            // rangos
+            if (i==0)
+                var range=  $("#range_paramA").data("ionRangeSlider");
+            else if (i==1)
+                var range=  $("#range_paramB").data("ionRangeSlider");
+            else if (i==2)
+                var range=  $("#range_paramC").data("ionRangeSlider");
+           range.update({
+                type: "double",
+                min: 0,
+                max: 1.2,
+                from: parseFloat(item.bajo),
+                to: parseFloat(item.alto),
+                step: 0.1,
+                grid: true,
+                grid_snap: true
+            });
+            // encabezado valor actual.
+            var ultima= parseFloat(item.ultMedicion);
+            if (i==0){
+                $('#paramCA')[0].textContent = ultima;
+                if(ultima<parseFloat(item.bajo))
+                    $('#paramCA').addClass('red');
+                else $('#paramCA').removeClass('red');
+            }
+            else if (i==1){
+                $('#paramCB')[0].textContent = ultima;     
+                if(ultima<parseFloat(item.bajo))
+                    $('#paramCB').addClass('red');
+                else $('#paramCB').removeClass('red');  
+            }
+            else if (i==2){
+                $('#paramCC')[0].textContent = ultima;
+                if(ultima<parseFloat(item.bajo))
+                    $('#paramCC').addClass('red');
+                else $('#paramCC').removeClass('red');
+            }
+            anterior= ultima;
+            // actualiza GAUGE.
+            var chart_gauge_elem;
+            var chart_gauge;
+            var txt;            
+            //
+            if (i==0){
+                chart_gauge_elem = document.getElementById('chart_gauge_a');
+                txt= document.getElementById("gauge-text-A");                
+            }
+            else if (i==1){
+                chart_gauge_elem = document.getElementById('chart_gauge_b');
+                txt= document.getElementById("gauge-text-B");                
+            }
+            else if (i==2){
+                chart_gauge_elem = document.getElementById('chart_gauge_c');
+                txt= document.getElementById("gauge-text-C");
+            }
+            if(ultima<parseFloat(item.bajo))
+                chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings_err);
+            else chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings); 
+            //
+            if(ultima>parseFloat(item.alto))
+                ultima = 100;
+            else if(ultima<parseFloat(item.bajo))
+                ultima = 0;
+            else ultima= ultima*100/parseFloat(item.alto);
+            //            
+            chart_gauge.maxValue = 100;
+            chart_gauge.setMinValue(1);
+            chart_gauge.animationSpeed = 10;
+            chart_gauge.set(ultima);
+            chart_gauge.setTextField(txt);   
+            
         });
 
         // pendiente por hacer la consulta filtrada por fechas usando el control de fechas: reportrange.
@@ -605,6 +636,21 @@ class Tipo {
             strokeColor: '#F0F3F3',
             generateGradient: true
         };
+        chart_gauge_settings_err = {
+            lines: 12,
+            angle: 0,
+            lineWidth: 0.4,
+            pointer: {
+                length: 0.75,
+                strokeWidth: 0.042,
+                color: '#1D212A'
+            },
+            limitMax: 'false',
+            colorStart: '#CF2B25',
+            colorStop: '#CF644F',
+            strokeColor: '#F0F3F3',
+            generateGradient: true
+        }; 
         //
         var chart_gauge_elem = document.getElementById('chart_gauge_a');
         var chart_gauge = new Gauge(chart_gauge_elem).setOptions(chart_gauge_settings);
@@ -713,10 +759,12 @@ class Tipo {
 
     };
 }
+var anterior=0;
 var rt= false;
 var ts;
 var series;
 var plot;
 var chart_gauge_settings;
+var chart_gauge_settings_err;
 var chart_plot_01_settings;
 let tipo = new Tipo();
