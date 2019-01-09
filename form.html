@@ -50,7 +50,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>Jairo León</h2>
+                <h2>Usuario del Sistema</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -121,7 +121,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="">Jairo León
+                    <img src="images/img.jpg" alt="">Usuario del Sistema
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -246,20 +246,28 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre del Componente <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="nombrecomponente" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Ubicación <span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="ubicacioncomponente" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Frecuencia de mantenimiento <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select name="cars" class="form-control col-md-7 col-xs-12">
-                            <option value="volvo">Semanal</option>
-                            <option value="saab">Mensual</option>
-                            <option value="fiat">Trimestral</option>
-                            <option value="audi">Semestral</option>
-                            <option value="audi">Anual</option>
+                          <select name="frecuencia" class="form-control col-md-7 col-xs-12">
+                            <option value="semanal">Semanal</option>
+                            <option value="mansual">Mensual</option>
+                            <option value="trimestral">Trimestral</option>
+                            <option value="semestral">Semestral</option>
+                            <option value="anual">Anual</option>
                           </select>
                         </div>
                       </div>
@@ -274,15 +282,6 @@
                         </div>
                       </div>
 
-                      <div class="form-group">
-                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Vencimiento Garantía</label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
-                              <div id="reportrange2" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                                  <span>Agosto 29, 2018 - Agosto 30, 2018</span> <b class="caret"></b>
-                              </div>
-                          </div>
-                        </div>
                       
                       <br />
                       
@@ -298,7 +297,7 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre <span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="nombresoporte" required="required" class="form-control col-md-7 col-xs-12">
                           </div>
                         </div>
 
@@ -306,7 +305,7 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Telefono <span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="telsoporte" required="required" class="form-control col-md-7 col-xs-12">
                           </div>
                         </div>
 
@@ -314,10 +313,9 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Departamento <span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="departamento" required="required" class="form-control col-md-7 col-xs-12">
                           </div>
                         </div>
-
                         <br />
 
                       <div class="x_title">
@@ -330,7 +328,7 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre del fabricante <span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="fabricante" required="required" class="form-control col-md-7 col-xs-12">
                           </div>
                         </div>
 
@@ -338,16 +336,26 @@
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Telefono <span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="telfabricante" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Vencimiento Garantía</label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                              <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                  <span>Agosto 29, 2018 - Agosto 30, 2018</span> <b class="caret"></b>
+                              </div>
                           </div>
                         </div>
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button class="btn btn-primary" type="button">Cancel</button>
-						  <button class="btn btn-primary" type="reset">Reset</button>
-                          <button type="submit" class="btn btn-success">Submit</button>
+                          <button class="btn btn-primary" type="button">Cancelar</button>
+						  <button class="btn btn-primary" type="reset">Borrar</button>
+                          <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                       </div>
 
@@ -410,3 +418,14 @@
 	
   </body>
 </html>
+<script>
+    $(document).ready(function () {
+      $("#nombrecomponente").val('Aire Acondicionado');
+      $("#ubicacioncomponente").val('San Pedro - sala de Fuerza #1');
+      $("#nombresoporte").val('Osvaldo Rodriguez');
+      $("#telsoporte").val('2001-0348');
+      $("#departamento").val('Electromecanica Y Civil');
+      $("#fabricante").val('Lieber');
+      $("#telfabricante").val('2257-5749');
+    });
+</script>
