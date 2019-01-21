@@ -73,7 +73,6 @@ class Componente{
                 ORDER BY nombreComponente ASC;';
             $param= array(':idSala'=>$this->idSala);
             $componentesXSala = DATA::Ejecutar($sql, $param);
-
             if($componentesXSala){
                 
                 foreach ($componentesXSala as $keyComponenteXsala=> $item) {    
@@ -81,17 +80,16 @@ class Componente{
                     $objComponente = new Componente;
                     $objComponente->id = $item["idComponente"];
                     $objComponente->nombre = $item["nombreComponente"];
+                    $objComponente->estado = "OK";
 
 
-                    $sql='SELECT v.id, v.nombre, v.unidad, vc.max, vc.min, vc.optimo 
+                    $sql='SELECT vc.id, v.nombre, v.unidad, vc.max, vc.min, vc.optimo 
                         FROM variableComponente vc
                         INNER JOIN variable v on v.id = vc.idVariable
                         Where idComponente = :idComponente;';
                     $param= array(':idComponente'=>$item["idComponente"]);
                     $VariablesXComponente= DATA::Ejecutar($sql, $param);
-
-                    // $componentesXSala[$key]->variables = $VariablesXComponente;
-
+                    
                     if($VariablesXComponente){
 
                         $arrayVariables = array();
@@ -104,8 +102,7 @@ class Componente{
                             $objVariable->unidad = $item["unidad"];
                             $objVariable->max = $item["max"];
                             $objVariable->min = $item["min"];
-                            $objVariable->optmimo = $item["optimo"];
-
+                            $objVariable->optimo = $item["optimo"];
 
                             $sql='SELECT *
                             FROM estado
@@ -114,7 +111,8 @@ class Componente{
                             LIMIT 1;';
                             $param= array(':idVariableComponente'=>$item["id"]);
                             $estadoXVariable= DATA::Ejecutar($sql, $param);
-
+                           
+                            
                             if($estadoXVariable){
                                 
                                 $arrayEstado = array();
@@ -127,35 +125,30 @@ class Componente{
                                     $objEstado->valor = $item["valor"];
                                     $objEstado->fecha = $item["fecha"];
 
-                                    if($item["estado"] != "OK"){
-
-                                    }                                    
+                                    if($objEstado->estado != "OK"){
+                                        $objComponente->estado = $objEstado->estado;
+                                    }
+                                    
+                          
                                     array_push ($arrayEstado, $objEstado);
                                 }
                                 $objVariable->estados = $arrayEstado;
                                 // return true;
                             }
-                            else{
-                                // array_push ($arrayComponentes, $objComponente);
-                                // return $arrayComponentes;
-                            }
+                            
                             array_push ($arrayVariables, $objVariable);                            
                         }                                        
                         $objComponente->variables = $arrayVariables;
                     }
-                    else{                        
-                        // array_push ($arrayComponentes, $objComponente);
-                        // return $arrayComponentes;
-                    }
 
                     array_push ($arrayComponentes, $objComponente);
                 }                
+                return $arrayComponentes;
             }            
             else { 
                 return false;
             }
 
-            1+1;
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

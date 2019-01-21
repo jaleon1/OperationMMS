@@ -15,6 +15,8 @@
     <!-- Font Awesome -->
     <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
+    <link href="./vendors/sweetalert2/sweetalert2.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
     <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Datatables -->
     <link href="vendors/datatables.net/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -121,10 +123,6 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Elementos por Sala:</h2>
-                                    <div class="nav navbar-right panel_toolbox">
-                                        <button id="btnIniciarRecorrido" type="button" class="btn btn-primary">Iniciar
-                                            Revisión de Componentes</button>
-                                    </div>
 
                                     <div class="clearfix"></div>
                                 </div>
@@ -167,6 +165,33 @@
         </div>
     </div>
 
+
+
+    <!-- MODAL VARIABLES DE COMPONENTE -->
+
+    <!-- Modal -->
+    <div id="modal_variable_componente" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="modal_variable_componente_titulo" class="modal-title"></h4>
+                </div>
+                <div id="modal_variable_componente_cuerpo" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Listo</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL VARIABLES DE COMPONENTE -->
+
     <!-- jQuery -->
     <script src="./vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -174,6 +199,12 @@
     <!-- JS dataTables -->
     <script src="./vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="./vendors/datatables.net/js/dataTables.bootstrap.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="./vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
+    <script src="./vendors/sweetalert2/promise-polyfill.js"></script>
+    <!-- Variable -->
+    <script src="js/variable.js"></script>
     <!-- Salas -->
     <script src="js/sala.js"></script>
     <!-- Componente -->
@@ -195,6 +226,10 @@
         sala.ReadbyDC;
         // componente.ReadbyDC;
     });
+
+        
+    
 </script>
 
 </html>
+
