@@ -32,8 +32,8 @@ class Sala {
     draw(e) {
         var objSala = JSON.parse(e);
 
-        $("lst_DC").empty();
-        $("tab-panel-salas").empty();
+        $("#lst_DC").empty();
+        $("#tab-panel-salas").empty();
         $.each( objSala, function( key, itemSala ) {
             var nomSala= itemSala.nombre.replace(/ /g, "")
             if (key == 0){
