@@ -12,11 +12,15 @@
 
   <!-- Bootstrap -->
   <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Datatables -->
+  <link href="vendors/datatables.net/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="vendors/datatables.net/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- NProgress -->
   <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
-
+  <!-- SweetAlert2 -->
+  <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="./css/custom.min.css" rel="stylesheet">
 </head>
@@ -119,9 +123,11 @@
                 <div class="x_title">
                   <h2>Lista de Elementos:</h2>
                   <div class="nav navbar-right panel_toolbox">
+                    <a href="listacomponentes.html">
                       <button id="btnIniciarRecorrido" type="button" class="btn btn-primary">Iniciar Revisión de Componentes</button>
+                    </a>
                   </div>
-                  
+
                   <div class="clearfix"></div>
                 </div>
 
@@ -129,87 +135,13 @@
                   <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="panel with-nav-tabs panel-default">
                       <div class="panel-heading">
-                        <ul id = "lst_DC" class="nav nav-tabs">
+                        <ul id="lst_DC" class="nav nav-tabs">
                           <!-- Aqui se cargan los CDC que esten en la base de datos -->
                         </ul>
                       </div>
                       <div class="panel-body">
-                        <div id="conten_tab_elemXcentrodatos" class="tab-content">
-                          <div class="tab-pane fade in active" id="tab1default">
-                            <!-- Contenido de tabla 1 -->
-                            <div class="x_content">
-                              <div class="table-responsive">
-                                <table id="tb_sp" class="table table-striped jambo_table bulk_action">
-                                  <thead>
-                                    <tr>
-                                      <th>Componente</th>
-                                      <th>Fecha</th>
-                                      <th>Usuario Entrega</th>
-                                      <th>Usuario Recibe</th>
-                                      <th>Estado</th>
-                                    </tr>
-                                  </thead>
+                        <div id="tab-panel-componentes" class="tab-content">
 
-                                  <tbody>
-
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                            <!-- Contenido de tabla 1 -->
-                          </div>
-                          <div class="tab-pane fade" id="tab2default">
-                            <!-- Contenido de tabla 2 -->
-                            <div class="x_content">
-                              <div class="table-responsive">
-                                <table id="tb_sb" class="table table-striped jambo_table bulk_action">
-                                  <thead>
-                                    <tr>
-                                      <th>Componente</th>
-                                      <th>Fecha</th>
-                                      <th>Usuario Entrega</th>
-                                      <th>Usuario Recibe</th>
-                                      <th>Estado</th>
-                                    </tr>
-                                  </thead>
-
-                                  <tbody>
-                                    <tr>
-                                      <td>Aire Acondicionado #4 Sala 3</td>
-                                      <td>17/01/2019 09:31pm</td>
-                                      <td>Jairo Leon Gonzalez</td>
-                                      <td>Jason Rojas</td>
-                                      <td>OK</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                            <!-- Contenido de tabla 2 -->
-                          </div>
-                          <div class="tab-pane fade" id="tab3default">
-                            <!-- Contenido de tabla 3 -->
-                            <div class="x_content">
-                              <div class="table-responsive">
-                                <table id="tb_bc" class="table table-striped jambo_table bulk_action">
-                                  <thead>
-                                    <tr>
-                                      <th>Componente</th>
-                                      <th>Fecha</th>
-                                      <th>Usuario Entrega</th>
-                                      <th>Usuario Recibe</th>
-                                      <th>Estado</th>
-                                    </tr>
-                                  </thead>
-
-                                  <tbody>
-
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                            <!-- Contenido de tabla 3 -->
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -237,12 +169,48 @@
     </div>
   </div>
 
+  <!-- MODAL VARIABLES DE COMPONENTE -->
+
+  <!-- Modal -->
+  <div id="modal_variable_componente" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="modal_variable_componente_titulo" class="modal-title"></h4>
+        </div>
+        <div id="modal_variable_componente_cuerpo" class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Listo</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL VARIABLES DE COMPONENTE -->
+
   <!-- jQuery -->
   <script src="./vendors/jquery/dist/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="./vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- JS dataTables -->
+  <script src="./vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="./vendors/datatables.net/js/dataTables.bootstrap.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="./vendors/sweetalert2/sweetalert2.all.min.js"></script>
+  <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
+  <script src="./vendors/sweetalert2/promise-polyfill.js"></script>
   <!-- DataCenter -->
   <script src="js/dataCenter.js"></script>
+  <!-- Variable -->
+  <script src="js/variable.js"></script>
+  <!-- Componente -->
+  <script src="js/componente.js"></script>
   <!-- NProgress -->
   <script src="./vendors/nprogress/nprogress.js"></script>
 

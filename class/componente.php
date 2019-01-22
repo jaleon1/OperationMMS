@@ -15,7 +15,10 @@ if( isset($_POST["action"])){
             echo json_encode($componente->ReadAll());
             break;
         case "ReadbySala":
-            echo json_encode($componente->ReadbySala());            
+            echo json_encode($componente->ReadbySala());  
+            break;   
+        case "ReadbyDC":
+            echo json_encode($componente->ReadbyDC());            
             break;
         case "create":
             echo json_encode($componente->create());
@@ -56,7 +59,8 @@ class Componente{
             require_once("UUID.php");
             
             $this->id= $obj["id"] ?? UUID::v4();
-            $this->idSala= $obj["idSala"] ?? null; 
+            $this->idSala= $obj["idSala"] ?? null;
+            $this->idDataCenter= $obj["idDataCenter"] ?? null; 
             $this->nombre= $obj["nombre"] ?? null;
 
         }
@@ -73,7 +77,6 @@ class Componente{
                 ORDER BY nombreComponente ASC;';
             $param= array(':idSala'=>$this->idSala);
             $componentesXSala = DATA::Ejecutar($sql, $param);
-
             if($componentesXSala){
                 
                 foreach ($componentesXSala as $keyComponenteXsala=> $item) {    
@@ -81,17 +84,16 @@ class Componente{
                     $objComponente = new Componente;
                     $objComponente->id = $item["idComponente"];
                     $objComponente->nombre = $item["nombreComponente"];
+                    $objComponente->estado = "OK";
 
 
-                    $sql='SELECT v.id, v.nombre, v.unidad, vc.max, vc.min, vc.optimo 
+                    $sql='SELECT vc.id, v.nombre, v.unidad, vc.max, vc.min, vc.optimo 
                         FROM variableComponente vc
                         INNER JOIN variable v on v.id = vc.idVariable
                         Where idComponente = :idComponente;';
                     $param= array(':idComponente'=>$item["idComponente"]);
                     $VariablesXComponente= DATA::Ejecutar($sql, $param);
-
-                    // $componentesXSala[$key]->variables = $VariablesXComponente;
-
+                    
                     if($VariablesXComponente){
 
                         $arrayVariables = array();
@@ -104,8 +106,7 @@ class Componente{
                             $objVariable->unidad = $item["unidad"];
                             $objVariable->max = $item["max"];
                             $objVariable->min = $item["min"];
-                            $objVariable->optmimo = $item["optimo"];
-
+                            $objVariable->optimo = $item["optimo"];
 
                             $sql='SELECT *
                             FROM estado
@@ -114,7 +115,8 @@ class Componente{
                             LIMIT 1;';
                             $param= array(':idVariableComponente'=>$item["id"]);
                             $estadoXVariable= DATA::Ejecutar($sql, $param);
-
+                           
+                            
                             if($estadoXVariable){
                                 
                                 $arrayEstado = array();
@@ -127,35 +129,30 @@ class Componente{
                                     $objEstado->valor = $item["valor"];
                                     $objEstado->fecha = $item["fecha"];
 
-                                    if($item["estado"] != "OK"){
-
-                                    }                                    
+                                    if($objEstado->estado != "OK"){
+                                        $objComponente->estado = $objEstado->estado;
+                                    }
+                                    
+                          
                                     array_push ($arrayEstado, $objEstado);
                                 }
                                 $objVariable->estados = $arrayEstado;
                                 // return true;
                             }
-                            else{
-                                // array_push ($arrayComponentes, $objComponente);
-                                // return $arrayComponentes;
-                            }
+                            
                             array_push ($arrayVariables, $objVariable);                            
                         }                                        
                         $objComponente->variables = $arrayVariables;
                     }
-                    else{                        
-                        // array_push ($arrayComponentes, $objComponente);
-                        // return $arrayComponentes;
-                    }
 
                     array_push ($arrayComponentes, $objComponente);
                 }                
+                return $arrayComponentes;
             }            
             else { 
                 return false;
             }
 
-            1+1;
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -167,6 +164,107 @@ class Componente{
         }
     }
     
+    function ReadbyDC(){
+        try {
+
+            $arrayComponentes = array();
+            
+            $sql='SELECT c.id idComponente, c.nombre nombreComponente
+                    FROM componente c
+                    INNER JOIN sala s on s.id = c.idSala
+                    INNER JOIN dataCenter dc on dc.id = s.idDataCenter
+                    WHERE dc.id = :id
+                    ORDER BY nombreComponente ASC;';
+            $param= array(':id'=>$this->idDataCenter);
+            $componentesXSala = DATA::Ejecutar($sql, $param);
+            if($componentesXSala){
+                
+                foreach ($componentesXSala as $keyComponenteXsala=> $item) {    
+
+                    $objComponente = new Componente;
+                    $objComponente->id = $item["idComponente"];
+                    $objComponente->nombre = $item["nombreComponente"];
+                    $objComponente->estado = "OK";
+
+
+                    $sql='SELECT vc.id, v.nombre, v.unidad, vc.max, vc.min, vc.optimo 
+                        FROM variableComponente vc
+                        INNER JOIN variable v on v.id = vc.idVariable
+                        Where idComponente = :idComponente;';
+                    $param= array(':idComponente'=>$item["idComponente"]);
+                    $VariablesXComponente= DATA::Ejecutar($sql, $param);
+                    
+                    if($VariablesXComponente){
+
+                        $arrayVariables = array();
+
+                        foreach ($VariablesXComponente as $keyVarXcomponente=> $item) {
+                            
+                            $objVariable = new Variable;
+                            $objVariable->id = $item["id"];
+                            $objVariable->nombre = $item["nombre"];
+                            $objVariable->unidad = $item["unidad"];
+                            $objVariable->max = $item["max"];
+                            $objVariable->min = $item["min"];
+                            $objVariable->optimo = $item["optimo"];
+
+                            $sql='SELECT *
+                            FROM estado
+                            WHERE idVariableComponente = :idVariableComponente
+                            ORDER BY fecha DESC
+                            LIMIT 1;';
+                            $param= array(':idVariableComponente'=>$item["id"]);
+                            $estadoXVariable= DATA::Ejecutar($sql, $param);
+                           
+                            
+                            if($estadoXVariable){
+                                
+                                $arrayEstado = array();
+
+                                foreach ($estadoXVariable as $keyEstadoXvariable=> $item) {
+
+                                    $objEstado = new Estado;
+                                    $objEstado->id = $item["id"];
+                                    $objEstado->estado = $item["estado"];
+                                    $objEstado->valor = $item["valor"];
+                                    $objEstado->fecha = $item["fecha"];
+
+                                    if($objEstado->estado != "OK"){
+                                        $objComponente->estado = $objEstado->estado;
+                                    }
+                                    
+                          
+                                    array_push ($arrayEstado, $objEstado);
+                                }
+                                $objVariable->estados = $arrayEstado;
+                                // return true;
+                            }
+                            
+                            array_push ($arrayVariables, $objVariable);                            
+                        }                                        
+                        $objComponente->variables = $arrayVariables;
+                    }
+
+                    array_push ($arrayComponentes, $objComponente);
+                }                
+                return $arrayComponentes;
+            }            
+            else { 
+                return false;
+            }
+
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+
     function create(){
         try {
             $sql="insert into dataCenter (id, nombre, ubicacion) 
