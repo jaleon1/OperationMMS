@@ -72,7 +72,8 @@
                     <li><a href="mantenimientoDataCenters.html">Data Centers</a></li>
                     <li><a href="mantenimientoSalas.html">Salas por Data Center</a></li>
                     <li><a href="mantenimientoComponentes.html">Componentes</a></li>
-                    <li><a href="mantenimientoVariables.html">Variables</a></li><li><a href="mantenimientoVariablesComponentes.html">Variables por Componente</a></li>
+                    <li><a href="mantenimientoVariables.html">Variables</a></li>
+                    <li><a href="mantenimientoVariablesComponentes.html">Variables por Componente</a></li>
                   </ul>
                 </li>
                 <li><a><i class="fa fa-desktop"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
@@ -119,7 +120,7 @@
         <div class="">
           <div class="page-title">
             <div class="title_left">
-              <h3>Componentes Electromencanicos</h3>
+              <h3>Mantenimiento Variables por Componentes</h3>
             </div>
           </div>
 
@@ -128,7 +129,7 @@
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
-                <div class="x_title">
+                <!-- <div class="x_title">
                   <h2>Lista de Elementos:</h2>
                   <div class="nav navbar-right panel_toolbox">
                     <a href="listacomponentes.html">
@@ -137,15 +138,114 @@
                   </div>
 
                   <div class="clearfix"></div>
-                </div>
+                </div> -->
 
                 <div class="row">
                   <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="panel with-nav-tabs panel-default">
                       <div class="panel-heading">
-                        <ul id="lst_DC" class="nav nav-tabs">
-                          <!-- Aqui se cargan los CDC que esten en la base de datos -->
-                        </ul>
+                        <form id="frm-dataCenters" data-parsley-validate class="form-horizontal form-label-left">
+                      
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Data Center <span class="required">*</span>
+                                </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                  <select name="dataCenter" class="form-control col-md-7 col-xs-12">
+                                    <option value="dc1">San Pedro</option>
+                                    <option value="dc2">Sabana</option>
+                                    <option value="dc3">Guatuso</option>
+                                  </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Sala <span class="required">*</span>
+                                </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <select name="salas" class="form-control col-md-7 col-xs-12">
+                                    <option value="s1">Sala 1</option>
+                                    <option value="s2">Sala 2</option>
+                                    <option value="s3">Sala 3</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Componente <span class="required">*</span>
+                                </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <select name="componente" class="form-control col-md-7 col-xs-12">
+                                    <option value="s1">Aire 1</option>
+                                    <option value="s2">Aire 2</option>
+                                    <option value="s3">Aire 3</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Variable <span class="required">*</span>
+                                </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <select name="variable" class="form-control col-md-7 col-xs-12">
+                                    <option value="s1">Temperatura</option>
+                                    <option value="s2">Frecuencia</option>
+                                    <option value="s3">Voltaje</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1 col-sm-6 col-xs-12">
+                                    <button id="btnAddVariable" data-toggle="modal" type="button" class="btn btn-info btn-lg">></button>                           
+                                </div>
+                            </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Maximo <span class="required">*</span>
+                            </label>
+                            <div class="col-md-5 col-sm-6 col-xs-12">
+                              <input type="text" id="maximoVariable" required="required" class="form-control col-md-7 col-xs-12">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimo <span class="required">*</span>
+                            </label>
+                            <div class="col-md-5 col-sm-6 col-xs-12">
+                                <input type="text" id="minimoVariable" required="required" class="form-control col-md-7 col-xs-12">
+                            </div>
+                            </div>
+                            
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Optimo <span class="required">*</span>
+                            </label>
+                            <div class="col-md-5 col-sm-6 col-xs-12">
+                                <input type="text" id="optimoVariable" required="required" class="form-control col-md-7 col-xs-12">                              
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-8 col-sm-12 col-xs-12">
+                                    <table id="tblVariablesComponentes" class="table table-striped jambo_table bulk_action" role="grid" aria-describedby="datatable_info">
+                                        <thead>
+                                            <tr role="row" class="headings">
+                                                <th>Variable</th>
+                                                <th>Maximo</th>
+                                                <th>Minimo</th>
+                                                <th>Optimo</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tBody-variablesComponentes"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                          <div class="ln_solid"></div>
+                          
+                          <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                              <button class="btn btn-primary" type="reset">Borrar</button>
+                              <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                          </div>
+
+                        </form>
                       </div>
                       <div class="panel-body">
                         <div id="tab-panel-componentes" class="tab-content">
