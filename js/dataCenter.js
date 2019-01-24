@@ -25,6 +25,32 @@ class DataCenter {
             });
     }
 
+    get create(){
+        $('#btnGuardar').attr("disabled", "disabled");
+        var miAccion = this.id == null ? 'create' : 'update';
+        this.nombre = $("#nombre").val();
+        this.ubicacion = $("#ubicacion").val();
+
+        $.ajax({
+            type: "POST",
+            url: "class/dataCenter.php",
+            data: {
+                action: miAccion,
+                obj: JSON.stringify(this)
+            }
+        })
+            .done(function (e) {
+                alert("OK");
+            })
+            .fail(function (e) {
+                // dataCenter.showError(e);
+            })
+            .always(function () {
+                dataCenter.clear();
+                $('#btnGuardar').attr("disabled", false);
+            });
+        
+    }
 
     // Methods
     draw(e) {
@@ -65,9 +91,20 @@ class DataCenter {
         });   
     };
 
-    
+    clear(){
+        $("#nombre").val('');
+        $("#ubicacion").val('');
+    }
 
     Init() {
+        var validator = new FormValidator({ "events": ['input'] }, document.forms["frmDataCenters"]);
+        $('#frmDataCenters').submit(function (e) {
+            e.preventDefault();
+            var validatorResult = validator.checkAll(this);
+            if (validatorResult.valid)
+                dataCenter.create;
+            return false;
+        });
         //NProgress
         $(function()
         {

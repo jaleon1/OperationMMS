@@ -79,11 +79,8 @@ class Sala{
     
     function create(){
         try {
-            $sql="insert into dataCenter (id, nombre, ubicacion) 
-            VALUES  ((UUID(), :nombre, :ubicacion);";
-
-                $param= array(':nombre'=>$this->nombre,
-                ':ubicacion'=>$this->ubicacion);
+            $sql="INSERT INTO `cdc_bms`.`dataCenter`(`id`,`nombre`,`idDataCenter`)VALUES(uuid(),:nombre,:idDataCenter);";
+            $param= array(':nombre'=>$this->nombre,':idDataCenter'=>$this->idDataCenter);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data) { 
                 return true;

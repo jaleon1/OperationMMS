@@ -53,7 +53,7 @@ class DataCenter{
     function ReadAll(){
         try {
             $sql='SELECT id, nombre, ubicacion
-                FROM dataCenter
+                FROM cdc_bms.dataCenter
                 ORDER BY nombre DESC;';
             $data= DATA::Ejecutar($sql);
             if($data){
@@ -72,11 +72,8 @@ class DataCenter{
     
     function create(){
         try {
-            $sql="insert into dataCenter (id, nombre, ubicacion) 
-            VALUES  ((UUID(), :nombre, :ubicacion);";
-
-                $param= array(':nombre'=>$this->nombre,
-                ':ubicacion'=>$this->ubicacion);
+            $sql="INSERT INTO `cdc_bms`.`dataCenter`(`id`,`nombre`,`ubicacion`)VALUES(uuid(),:nombre,:ubicacion);";
+            $param= array(':nombre'=>$this->nombre,':ubicacion'=>$this->ubicacion);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data) { 
                 return true;

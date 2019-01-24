@@ -20,7 +20,7 @@
   <!-- NProgress -->
   <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- SweetAlert2 -->
-  <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
+  <link href="./vendors/sweetalert2/sweetalert2.min.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="./css/custom.min.css" rel="stylesheet">
 </head>
@@ -143,7 +143,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                       <div class="panel with-nav-tabs panel-default">
                         <div class="panel-heading">
-                          <form id="frm-dataCenters" data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="frmSalas" data-parsley-validate class="form-horizontal form-label-left">
                         
                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre de la Sala <span class="required">*</span>
@@ -157,11 +157,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Data Center <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                  <select name="dataCenter" class="form-control col-md-7 col-xs-12">
-                                    <option value="dc1">San Pedro</option>
-                                    <option value="dc2">Sabana</option>
-                                    <option value="dc3">Guatuso</option>
-                                  </select>
+                                  <select name="dataCenters" class="form-control col-md-7 col-xs-12"></select>
                                 </div>
                               </div>
                             
@@ -170,7 +166,7 @@
                             <div class="form-group">
                               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="reset">Borrar</button>
-                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <button id="btnGuardar" type="submit" class="btn btn-success">Guardar</button>
                               </div>
                             </div>
   
@@ -247,6 +243,8 @@
   <script src="js/variable.js"></script>
   <!-- Componente -->
   <script src="js/componente.js"></script>
+  <!-- Componente -->
+  <script src="js/sala.js"></script>
   <!-- NProgress -->
   <script src="./vendors/nprogress/nprogress.js"></script>
 
@@ -256,7 +254,7 @@
 
 <script>
   $(document).ready(function () {
-    dataCenter.ReadAll;
+    sala.ReadDC;
   });
 </script>
 
