@@ -20,7 +20,7 @@
   <!-- NProgress -->
   <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- SweetAlert2 -->
-  <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
+  <link href="./vendors/sweetalert2/sweetalert2.min.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="./css/custom.min.css" rel="stylesheet">
 </head>
@@ -138,13 +138,13 @@
                   <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="panel with-nav-tabs panel-default">
                       <div class="panel-heading">
-                        <form id="frm-dataCenters" data-parsley-validate class="form-horizontal form-label-left">
+                        <form id="frmDataCenters" data-parsley-validate class="form-horizontal form-label-left">
                       
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre del Data Center <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="nombreDataCenter" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="nombre" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
 
@@ -152,7 +152,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Ubicación <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="ubicacionDataCenter" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="ubicacion" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
                           
@@ -161,7 +161,7 @@
                           <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                               <button class="btn btn-primary" type="reset">Borrar</button>
-                              <button type="submit" class="btn btn-success">Guardar</button>
+                              <button id="btnGuardar" type="submit" class="btn btn-success">Guardar</button>
                             </div>
                           </div>
 
@@ -241,14 +241,16 @@
   <script src="js/componente.js"></script>
   <!-- NProgress -->
   <script src="./vendors/nprogress/nprogress.js"></script>
-
   <!-- Custom Theme Scripts -->
   <script src="./js/custom.js"></script>
+  <!-- Validator -->
+  <script src="./vendors/validator/validator.min.js"></script>
 </body>
 
 <script>
   $(document).ready(function () {
-    dataCenter.ReadAll;
+    dataCenter.id=null;
+    dataCenter.Init();
   });
 </script>
 

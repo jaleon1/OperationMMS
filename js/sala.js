@@ -26,7 +26,67 @@ class Sala {
             });
     }
 
-    
+    get ReadDC() {
+        var miAccion = 'ReadAll';
+        $.ajax({
+            type: "POST",
+            url: "class/dataCenter.php",
+            data: {
+                action: miAccion,
+            }
+        })
+            .done(function (e) {
+                sala.ShowItemData(e);
+            })
+            .fail(function (e) {
+                // sala.showError(e);
+            })
+            .always(function () {
+                
+            });
+    }
+
+    ShowItemData(e) {
+        // carga objeto.
+        var data = JSON.parse(e);
+        // carga Data Centers
+        // $.each(data, function(i, item){
+        //     $('#dataCenters option[value=' + item.id + ']').prop("selected", true);
+        // });
+
+        $.each(data, function() {
+            $("#dataCenters").append($("<option />").val(data.id).text(data.nombre));
+        });
+
+        // $("#dataCenters").selectpicker("refresh");
+    };
+
+    get create(){
+        $('#btnGuardar').attr("disabled", "disabled");
+        var miAccion = this.id == null ? 'create' : 'update';
+        this.nombre = $("#nombre").val();
+        this.ubicacion = $("#ubicacion").val();
+
+        $.ajax({
+            type: "POST",
+            url: "class/dataCenter.php",
+            data: {
+                action: miAccion,
+                obj: JSON.stringify(this)
+            }
+        })
+            .done(function (e) {
+                alert("OK");
+            })
+            .fail(function (e) {
+                // dataCenter.showError(e);
+            })
+            .always(function () {
+                sala.clear();
+                $('#btnGuardar').attr("disabled", false);
+            });
+        
+    }
 
     // Methods
     draw(e) {
@@ -69,9 +129,20 @@ class Sala {
         
     };
 
-    
+    clear(){
+        $("#nombre").val('');
+        $("#dataCenter").val('');
+    }
 
     Init() {
+        var validator = new FormValidator({ "events": ['input'] }, document.forms["frmSalas"]);
+        $('#frmSalas').submit(function (e) {
+            e.preventDefault();
+            var validatorResult = validator.checkAll(this);
+            if (validatorResult.valid)
+                sala.create;
+            return false;
+        });
         //NProgress
         $(function()
         {
