@@ -157,7 +157,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Data Center <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                  <select name="dataCenters" class="form-control col-md-7 col-xs-12"></select>
+                                  <select id="dataCenters" name="dataCenters" class="form-control col-md-7 col-xs-12" required="required"></select>
                                 </div>
                               </div>
                             
@@ -166,7 +166,7 @@
                             <div class="form-group">
                               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button class="btn btn-primary" type="reset">Borrar</button>
-                                <button id="btnGuardar" type="submit" class="btn btn-success">Guardar</button>
+                                <button id="btnGuardarSala" type="submit" class="btn btn-success">Guardar</button>
                               </div>
                             </div>
   
@@ -237,23 +237,26 @@
   <script src="./vendors/sweetalert2/sweetalert2.all.min.js"></script>
   <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
   <script src="./vendors/sweetalert2/promise-polyfill.js"></script>
+  <!-- Sala -->
+  <script src="js/sala.js"></script>
   <!-- DataCenter -->
   <script src="js/dataCenter.js"></script>
   <!-- Variable -->
   <script src="js/variable.js"></script>
   <!-- Componente -->
   <script src="js/componente.js"></script>
-  <!-- Componente -->
-  <script src="js/sala.js"></script>
   <!-- NProgress -->
   <script src="./vendors/nprogress/nprogress.js"></script>
-
   <!-- Custom Theme Scripts -->
   <script src="./js/custom.js"></script>
+  <!-- Validator -->
+  <script src="./vendors/validator/validator.min.js"></script>
 </body>
 
 <script>
   $(document).ready(function () {
+    sala.id=null;
+    sala.Init();
     sala.ReadDC;
   });
 </script>

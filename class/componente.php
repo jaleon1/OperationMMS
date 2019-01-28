@@ -264,14 +264,10 @@ class Componente{
         }
     }
 
-
     function create(){
         try {
-            $sql="insert into dataCenter (id, nombre, ubicacion) 
-            VALUES  ((UUID(), :nombre, :ubicacion);";
-
-                $param= array(':nombre'=>$this->nombre,
-                ':ubicacion'=>$this->ubicacion);
+            $sql="INSERT INTO `cdc_bms`.`componente`(`id`,`idSala`,`nombre`) VALUES (uuid(),:idSala,:nombre);";
+            $param= array(':nombre'=>$this->nombre,':idSala'=>$this->idSala);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data) { 
                 return true;

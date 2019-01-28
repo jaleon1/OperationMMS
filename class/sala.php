@@ -51,7 +51,27 @@ class Sala{
             $this->id= $obj["id"] ?? UUID::v4();
             $this->idSala= $obj["idSala"] ?? null; 
             $this->nombre= $obj["nombre"] ?? null;
+            $this->idDataCenter= $obj["idDataCenter"] ?? null;
+        }
+    }
 
+    function ReadAll(){
+        try {
+            $sql='SELECT id, nombre
+                FROM cdc_bms.sala
+                ORDER BY nombre DESC;';
+            $data= DATA::Ejecutar($sql);
+            if($data){
+                return $data;
+            }
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
         }
     }
 
@@ -79,7 +99,7 @@ class Sala{
     
     function create(){
         try {
-            $sql="INSERT INTO `cdc_bms`.`dataCenter`(`id`,`nombre`,`idDataCenter`)VALUES(uuid(),:nombre,:idDataCenter);";
+            $sql="INSERT INTO `cdc_bms`.`sala`(`id`,`nombre`,`idDataCenter`)VALUES(uuid(),:nombre,:idDataCenter);";
             $param= array(':nombre'=>$this->nombre,':idDataCenter'=>$this->idDataCenter);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data) { 
