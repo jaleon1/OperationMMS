@@ -36,40 +36,34 @@ class Sala {
             }
         })
             .done(function (e) {
-                sala.ShowItemData(e);
+                sala.ShowItemDataDC(e);
             })
             .fail(function (e) {
+                alert("Error!");
                 // sala.showError(e);
             })
             .always(function () {
-                
+                sala.clear();
             });
     }
 
-    ShowItemData(e) {
+    ShowItemDataDC(e) {
         // carga objeto.
         var data = JSON.parse(e);
-        // carga Data Centers
-        // $.each(data, function(i, item){
-        //     $('#dataCenters option[value=' + item.id + ']').prop("selected", true);
-        // });
-
-        $.each(data, function() {
-            $("#dataCenters").append($("<option />").val(data.id).text(data.nombre));
+        $.each(data, function(i) {
+            $('#dataCenters').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
         });
-
-        // $("#dataCenters").selectpicker("refresh");
     };
 
     get create(){
-        $('#btnGuardar').attr("disabled", "disabled");
+        $('#btnGuardarSala').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'create' : 'update';
-        this.nombre = $("#nombre").val();
-        this.ubicacion = $("#ubicacion").val();
+        this.nombre = $("#nombreDataCenter").val();
+        this.idDataCenter = $("#dataCenters").val();
 
         $.ajax({
             type: "POST",
-            url: "class/dataCenter.php",
+            url: "class/sala.php",
             data: {
                 action: miAccion,
                 obj: JSON.stringify(this)
@@ -80,10 +74,11 @@ class Sala {
             })
             .fail(function (e) {
                 // dataCenter.showError(e);
+                alert('Error Sala 1');
             })
             .always(function () {
                 sala.clear();
-                $('#btnGuardar').attr("disabled", false);
+                $('#btnGuardarSala').attr("disabled", false);
             });
         
     }
@@ -130,12 +125,12 @@ class Sala {
     };
 
     clear(){
-        $("#nombre").val('');
-        $("#dataCenter").val('');
+        $("#nombreDataCenter").val('');
+        $("#dataCenters").val('');
     }
 
     Init() {
-        var validator = new FormValidator({ "events": ['input'] }, document.forms["frmSalas"]);
+        var validator = new FormValidator({ "events": ['input']['select'] }, document.forms["frmSalas"]);
         $('#frmSalas').submit(function (e) {
             e.preventDefault();
             var validatorResult = validator.checkAll(this);

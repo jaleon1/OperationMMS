@@ -51,6 +51,92 @@ class Componente {
             });
     }
     
+    get ReadDC() {
+        var miAccion = 'ReadAll';
+        $.ajax({
+            type: "POST",
+            url: "class/dataCenter.php",
+            data: {
+                action: miAccion,
+            }
+        })
+            .done(function (e) {
+                componente.ShowItemDataDC(e);
+            })
+            .fail(function (e) {
+                alert("Error!");
+                // sala.showError(e);
+            })
+            .always(function () {
+                
+            });
+    }
+
+    get ReadSala() {
+        var miAccion = 'ReadbyDC';
+        $.ajax({
+            type: "POST",
+            url: "class/sala.php",
+            data: {
+                action: miAccion,
+                idDataCenter: $("#dataCenters").val()
+            }
+        })
+            .done(function (e) {
+                componente.ShowItemDataSala(e);
+            })
+            .fail(function (e) {
+                alert("Error!");
+                // sala.showError(e);
+            })
+            .always(function () {
+                
+            });
+    }
+
+    ShowItemDataDC(e) {
+        // carga objeto.
+        var data = JSON.parse(e);
+        $.each(data, function(i) {
+            $('#dataCenters').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
+        });
+    };
+
+    ShowItemDataSala(e) {
+        // carga objeto.
+        var data = JSON.parse(e);
+        $.each(data, function(i) {
+            $('#salas').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
+        });
+    };
+
+    get create(){
+        $('#btnGuardarComponente').attr("disabled", "disabled");
+        var miAccion = this.id == null ? 'create' : 'update';
+        this.nombre = $("#nombreComponente").val();
+        this.idDataCenter = $("#dataCenters").val();
+        this.idSala = $("#salas").val();
+
+        $.ajax({
+            type: "POST",
+            url: "class/componente.php",
+            data: {
+                action: miAccion,
+                obj: JSON.stringify(this)
+            }
+        })
+            .done(function (e) {
+                alert("OK");
+            })
+            .fail(function (e) {
+                alert('Error Componente 1');
+            })
+            .always(function () {
+                componente.clear();
+                $('#btnGuardarComponente').attr("disabled", false);
+            });
+        
+    }
 
     // Methods
     draw(e) {
@@ -347,8 +433,21 @@ class Componente {
         });
     };
 
+    clear(){
+        $("#nombreComponente").val('');
+        $("#dataCenters").val('');
+        $("#salas").val('');
+    }
 
     Init() {
+        var validator = new FormValidator({ "events": ['input']['select'] }, document.forms["frmComponentes"]);
+        $('#frmComponentes').submit(function (e) {
+            e.preventDefault();
+            var validatorResult = validator.checkAll(this);
+            if (validatorResult.valid)
+                componente.create;
+            return false;
+        });
         //NProgress
         $(function()
         {
