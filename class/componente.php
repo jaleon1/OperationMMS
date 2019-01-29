@@ -109,7 +109,7 @@ class Componente{
                             $objVariable->optimo = $item["optimo"];
 
                             $sql='SELECT *
-                            FROM estado
+                            FROM estadoXVariable
                             WHERE idVariableComponente = :idVariableComponente
                             ORDER BY fecha DESC
                             LIMIT 1;';
@@ -209,7 +209,7 @@ class Componente{
                             $objVariable->optimo = $item["optimo"];
 
                             $sql='SELECT *
-                            FROM estado
+                            FROM estadoXVariable
                             WHERE idVariableComponente = :idVariableComponente
                             ORDER BY fecha DESC
                             LIMIT 1;';

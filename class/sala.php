@@ -57,10 +57,11 @@ class Sala{
 
     function ReadbyDC(){
         try {
-            $sql='SELECT id, idDataCenter, nombre 
-                FROM sala
-                WHERE idDataCenter = :idDataCenter
-                ORDER BY nombre ASC;';
+            $sql='SELECT s.id, s.idDataCenter, s.nombre, dc.nombre nombreDataCenter
+            FROM sala s
+            INNER JOIN dataCenter dc on dc.id = s.idDataCenter
+            WHERE idDataCenter = :idDataCenter
+            ORDER BY nombre ASC;';
                 $param= array(':idDataCenter'=>$this->idDataCenter);
             $data= DATA::Ejecutar($sql, $param);
             if($data){

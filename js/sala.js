@@ -32,6 +32,10 @@ class Sala {
     draw(e) {
         var objSala = JSON.parse(e);
 
+        
+        $("#lbl_dc").empty();
+        $("#lbl_dc").append(objSala[0].nombreDataCenter);
+
         $("#lst_DC").empty();
         $("#tab-panel-salas").empty();
         $.each( objSala, function( key, itemSala ) {
