@@ -228,16 +228,75 @@ class Componente {
             $("#modal_variable_componente_titulo").html(fila.nombre);
             $("#modal_variable_componente_cuerpo").empty();
             $("#modal_variable_componente_cuerpo").append(`
-                <div class="row">
-                    <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Max</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Min</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Anterior</div>
-                    <div class="col-sm-4" style="font-weight: bold;">Nuevo Valor</div>
-                </div>
-                <hr>`
+
+            <div class="row">
+                <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
+                <div class="col-sm-1" style="font-weight: bold;">Max</div>
+                <div class="col-sm-1" style="font-weight: bold;">Min</div>
+                <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
+                <div class="col-sm-1" style="font-weight: bold;">Anterior</div>
+                <div class="col-sm-4" style="font-weight: bold;">Nuevo Valor</div>
+            </div>
+            <hr>`
             );
+
+            
+            $("#modal_variable_componente_cuerpo").prepend(`
+            <div class="row">
+                <div class="container">
+                    <h2>Eventos Abiertos:</h2>
+                    
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Temperatura fuera de rango</a>
+                                </h4>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="comment">Causa:</label>
+                                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">                                                    
+                                        <div class="form-group">
+                                            <label for="comment">Solución:</label>
+                                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                    </div>                                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Aire Acondicionado con Polvo</a>
+                                </h4>
+                            </div>
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="comment">Causa:</label>
+                                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">                                                    
+                                        <div class="form-group">
+                                            <label for="comment">Solución:</label>
+                                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                    </div>                                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            `)
                     
             $.each( fila.variables, function( key, value ) {
                 var valorActual = "";
