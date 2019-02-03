@@ -1,0 +1,11 @@
+.componenteNoCheck {
+    color: lightslategray;    
+}
+
+.componenteCheck {
+    color: rgb(2, 116, 2);    
+}
+
+/* .oculto2{
+    display: none;
+} */

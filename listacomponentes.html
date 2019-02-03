@@ -23,6 +23,7 @@
     <link href="vendors/datatables.net/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="./css/custom.min.css" rel="stylesheet">
+    <link href="./css/listaComponentes.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -53,36 +54,37 @@
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
-                          <h3>General</h3>
-                          <ul class="nav side-menu">
-                            <li><a><i class="fa fa-home"></i> Alarmas <span class="fa fa-chevron-down"></span></a>
-                              <ul class="nav child_menu">
-                                <li><a href="index.html">Dashboard</a></li>
-                              </ul>
-                            </li>
-                            <li><a><i class="fa fa-edit"></i> MMS<span class="fa fa-chevron-down"></span></a>
-                              <ul class="nav child_menu">
-                                <li><a href="componentes.html">Componentes</a></li>
-                                <li><a href="form.html">Agregar Componente</a></li>                   
-                                <li><a href="tables.html">Historial</a></li>
-                              </ul>
-                            </li>
-                            <li><a><i class="fa fa-folder"></i> Mantenimientos <span class="fa fa-chevron-down"></span></a>
-                              <ul class="nav child_menu">
-                                <li><a href="mantenimientoDataCenters.html">Data Centers</a></li>
-                                <li><a href="mantenimientoSalas.html">Salas por Data Center</a></li>
-                                <li><a href="mantenimientoComponentes.html">Componentes</a></li>
-                                <li><a href="mantenimientoVariables.html">Variables</a></li><li><a href="mantenimientoVariablesComponentes.html">Variables por Componente</a></li>
-                              </ul>
-                            </li>
-                            <li><a><i class="fa fa-desktop"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
-                              <ul class="nav child_menu">
-                                <li><a href="tables2.html">General Elements</a></li>
-                              </ul>
-                            </li>
-                          </ul>
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                <li><a><i class="fa fa-home"></i> Alarmas <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Dashboard</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-edit"></i> MMS<span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="componentes.html">Componentes</a></li>
+                                        <li><a href="form.html">Agregar Componente</a></li>
+                                        <li><a href="tables.html">Historial</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-folder"></i> Mantenimientos <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="mantenimientoDataCenters.html">Data Centers</a></li>
+                                        <li><a href="mantenimientoSalas.html">Salas por Data Center</a></li>
+                                        <li><a href="mantenimientoComponentes.html">Componentes</a></li>
+                                        <li><a href="mantenimientoVariables.html">Variables</a></li>
+                                        <li><a href="mantenimientoVariablesComponentes.html">Variables por Componente</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-desktop"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="tables2.html">General Elements</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
-                      </div>
+                    </div>
                     <!-- /sidebar menu -->
 
                 </div>
@@ -131,6 +133,25 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2 id="lbl_dc"></h2>
+                                    <div class="navbar-right">
+                                        <form class="form-inline" action="/action_page.php">
+                                            <div class="form-group">
+                                                <label for="">Usuario Recibe: </label>
+                                                <select class="form-control" id="sel1">
+                                                    <option>Jairo Leon</option>
+                                                    <option>Carlos Chacon</option>
+                                                    <option>Jason Rojas</option>
+                                                    <option>Walter Garita</option>
+                                                    <option>Carlos Cabezas</option>
+                                                    <option>Andres Hidalgo</option>
+                                                    <option>Cristian Nuñez</option>
+                                                    <option>Eduardo Garro</option>
+                                                    <option>Manuel Mejias</option>
+                                                    <option>Carlos Vega</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
 
                                     <div class="clearfix"></div>
                                 </div>
@@ -152,11 +173,18 @@
                                     </div>
                                 </div>
 
-
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <button type="button" id="btn_finalizaInspeccion" class="btn btn-success disabled"
+                                            style=" width: -webkit-fill-available;">Finalizar Inspección </button>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
             <!-- /page content -->
@@ -188,12 +216,24 @@
                     <h4 id="modal_variable_componente_titulo" class="modal-title"></h4>
                 </div>
                 <div id="modal_variable_componente_cuerpo" class="modal-body">
+                    <div class="row">
+                        <div class="container">
+                            <h2>Eventos Relacionados:</h2>
 
-                        
+                            <div class="panel-group panel_reportes" id="accordion">
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Listo</button>
+                    <button id="btn_crea_inputs_reporte" type="button" class="btn btn-warning">Nuevo Reporte</button>
+
+                    <button id="btn_guarda_estado_componente" type="button" class="btn btn-default" data-dismiss="modal">Guardar
+                        Estado</button>
                 </div>
             </div>
 
@@ -212,7 +252,7 @@
     <!-- SweetAlert2 -->
     <script src="./vendors/sweetalert2/sweetalert2.all.min.js"></script>
     <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
-    <script src="./vendors/sweetalert2/promise-polyfill.js"></script>
+    <!-- <script src="./vendors/sweetalert2/promise-polyfill.js"></script> -->
     <!-- Variable -->
     <script src="js/variable.js"></script>
     <!-- Salas -->

@@ -10,7 +10,7 @@ class Componente {
     //Getter
     get ReadbyDC() {
         var miAccion = 'ReadbyDC';
-        
+
         $.ajax({
             type: "POST",
             url: "class/componente.php",
@@ -29,20 +29,20 @@ class Componente {
 
     get ReadbySala() {
         var miAccion = 'ReadbySala';
-        
+
         $.ajax({
             type: "POST",
             url: "class/componente.php",
             data: {
                 action: miAccion,
-                idSala: sala.id
+                idDataCenter: dataCenter.id
             }
         })
             .done(function (e) {
-                if (e != "false"){
-                    componente.draw(e);
+                if (e != "false") {
+                    componente.drawbySala(e);
                 }
-                else{
+                else {
                     return;
                 }
             })
@@ -50,7 +50,7 @@ class Componente {
                 // dataCenter.showError(e);
             });
     }
-    
+
     get ReadDC() {
         var miAccion = 'ReadAll';
         $.ajax({
@@ -68,7 +68,7 @@ class Componente {
                 // sala.showError(e);
             })
             .always(function () {
-                
+
             });
     }
 
@@ -90,14 +90,14 @@ class Componente {
                 // sala.showError(e);
             })
             .always(function () {
-                
+
             });
     }
 
     ShowItemDataDC(e) {
         // carga objeto.
         var data = JSON.parse(e);
-        $.each(data, function(i) {
+        $.each(data, function (i) {
             $('#dataCenters').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
         });
     };
@@ -105,12 +105,12 @@ class Componente {
     ShowItemDataSala(e) {
         // carga objeto.
         var data = JSON.parse(e);
-        $.each(data, function(i) {
+        $.each(data, function (i) {
             $('#salas').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
         });
     };
 
-    get create(){
+    get create() {
         $('#btnGuardarComponente').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'create' : 'update';
         this.nombre = $("#nombreComponente").val();
@@ -135,26 +135,41 @@ class Componente {
                 componente.clear();
                 $('#btnGuardarComponente').attr("disabled", false);
             });
-        
+
     }
 
-    // Methods
-    draw(e) {
-        var objComponente = JSON.parse(e);
-        var mitabla = [];
+    validaRevision() {
+        //Valida que todos los elementos hayan sido revisados
+    }
 
-        if ( !document.getElementById(`tb_${objComponente[0].idSala}`) ){
-            alert( "no existe Sala" );
-        }
-        else{
-            $(`#tb_${objComponente[0].idSala}`).empty();
-            mitabla = $(`#tb_${objComponente[0].idSala}`).DataTable({
-                data: objComponente,
+    actualizaEstadoVariable(idComponente, idVariable) {
+        //////////////////////////////
+        var item = objComponente.find(linea => linea.id = idComponente);
+
+        // var item2 = item.find(linea => linea.id = idVariable);
+        $.each(item.variables, function (key, value) {
+            if (value.id == idVariable) {
+                value.valor = $(`#inp_update_variable_${value.id}`).val();
+            }
+        })
+    }
+
+    // Dibuja los componentes por sala
+    drawbySala(e) {
+        objSalas = JSON.parse(e);
+        sala.activa = document.getElementsByClassName("active sala");
+        sala.activa = $(sala.activa).data("idsala")
+
+        $.each(objSalas, function (key, sala) {
+
+            $(`#tb_${sala.id}`).empty();
+            mitabla[sala.id] = $(`#tb_${sala.id}`).DataTable({
+                data: sala.componentes,
                 destroy: true,
                 "language": {
-                    "infoEmpty": "Sin Productos Ingresados",
-                    "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                    "emptyTable": "Sin Productos Ingresados",
+                    "infoEmpty": "Sin Elementos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "emptyTable": "Sin Elementos",
                     "search": "Buscar",
                     "zeroRecords": "No hay resultados",
                     "lengthMenu": "Mostar _MENU_ registros",
@@ -166,202 +181,159 @@ class Componente {
                     }
                 },
                 "order": [[1, "desc"]],
-                columns: [                 
-                    {
-                        title: "Acción",
-                        "searchable": false,
-                        // "width": "10%",
-                        data: null,
-                        className: "center",
-                        defaultContent: '<button class="btn-link"><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>'
-                    },
+                columns: [
                     {
                         title: "idComponente",
                         data: "id",
                         visible: false,
                         searchable: false
-                    },              
+                    },
                     {
-                        title: "nombreComponente",
+                        title: "Nombre Componente",
                         data: "nombre",
                         // "width": "40%",
                         visible: true
-                    },    
+                    },
                     {
                         title: "Estado Anterior",
                         data: "estado",
                         className: "center"
-                    },          
+                    },
                     {
                         title: "idSala",
                         data: "idSala",
                         visible: false,
                         searchable: false
-                    }, 
+                    },
                     {
                         title: "Nuevo Estado",
                         "searchable": false,
                         // "width": "10%",
                         data: null,
                         className: "center",
-                        defaultContent: '<button class="btn-link remove"><i class="fa fa-check-circle" aria-hidden="true"></i>  Marcar todo OK</i></button>'
-                    }
+                        defaultContent: '<button class="btn-link remove"><i class="fa fa-pencil componenteNoCheck" aria-hidden="true"> Pendiente </i></button>'
+                    },
+                    {
+                        title: "Acción",
+                        "searchable": false,
+                        // "width": "10%",
+                        data: null,
+                        className: "center",
+                        defaultContent: '<button class="btn-link"><i class="fa fa-check-circle-o componenteCheck" aria-hidden="true"> Todo OK</i></button>'
+                    },
                 ]
             });
-        }
+
+        })
 
 
-        $(`#tb_${objComponente[0].idSala} tbody`).on( 'click', 'tr', function () {
-            objComponente;
-            mitabla.rows;
+        $(`table tbody tr`).on('click', 'td', function () {
+            
+            $(".panel_reportes").empty();//Limpia el cuerpo del modal para cargar los eventos
 
-            if ( $(this).hasClass('selected') ) {
+            if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
             }
             else {
-                mitabla.$('tr.selected').removeClass('selected');
+                mitabla[sala.activa].$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
+
+                $(this).closest("tr").find("td:eq(2)").html('<i class="fa fa-check" aria-hidden="true"> Listo</i>');
+
+                var btnGuardaRecorrido = document.getElementsByClassName("fa-pencil");
+                if (btnGuardaRecorrido.length < 1) {
+                    $("#btn_finalizaInspeccion").removeClass("disabled");
+                }
             }
 
-            var fila = mitabla.row(this).data();
-            
+
+            if ($.trim(this.textContent) == ("Todo OK")
+            )
+                return false;
+
+
+            // mitabla[sala.activa].rows;
+
+
+
+            var fila = mitabla[sala.activa].row(this.parent).data();
+
+
             $("#modal_variable_componente_titulo").html(fila.nombre);
-            $("#modal_variable_componente_cuerpo").empty();
-            $("#modal_variable_componente_cuerpo").append(`
+            // $("#modal_variable_componente_cuerpo").empty();
+            // $("#modal_variable_componente_cuerpo").append(`
+            //     <div class="row">
+            //         <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
+            //         <div class="col-sm-1" style="font-weight: bold;">Max</div>
+            //         <div class="col-sm-1" style="font-weight: bold;">Min</div>
+            //         <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
+            //         <div class="col-sm-2" style="font-weight: bold;">Anterior</div>
+            //         <div class="col-sm-3" style="font-weight: bold;">Nuevo Valor</div>
+            //     </div>
+            //     <hr>`
+            // );
 
-            <div class="row">
-                <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
-                <div class="col-sm-1" style="font-weight: bold;">Max</div>
-                <div class="col-sm-1" style="font-weight: bold;">Min</div>
-                <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
-                <div class="col-sm-1" style="font-weight: bold;">Anterior</div>
-                <div class="col-sm-4" style="font-weight: bold;">Nuevo Valor</div>
-            </div>
-            <hr>`
-            );
+            // $.each(fila.variables, function (key, value) {
+            //     var color = "";
+            //     if (value.estados.length > 0) {
+            //         if (value.estados[0].valor > value.max || value.estados[0].valor < value.min) {
+            //             color = `red`
+            //         }
+            //         else {
+            //             color = `blue`
+            //         }
 
-            
-            $("#modal_variable_componente_cuerpo").prepend(`
-            <div class="row">
-                <div class="container">
-                    <h2>Eventos Abiertos:</h2>
-                    
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Temperatura fuera de rango</a>
-                                </h4>
-                            </div>
-                            <div id="collapse1" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="comment">Causa:</label>
-                                            <textarea class="form-control" rows="5" id="comment"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">                                                    
-                                        <div class="form-group">
-                                            <label for="comment">Solución:</label>
-                                            <textarea class="form-control" rows="5" id="comment"></textarea>
-                                        </div>
-                                    </div>                                                    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Aire Acondicionado con Polvo</a>
-                                </h4>
-                            </div>
-                            <div id="collapse2" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="comment">Causa:</label>
-                                            <textarea class="form-control" rows="5" id="comment"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">                                                    
-                                        <div class="form-group">
-                                            <label for="comment">Solución:</label>
-                                            <textarea class="form-control" rows="5" id="comment"></textarea>
-                                        </div>
-                                    </div>                                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-            `)
-                    
-            $.each( fila.variables, function( key, value ) {
-                var valorActual = "";
-                if (value.estados[0].valor > value.max || value.estados[0].valor < value.min ){ 
-                    valorActual = `<div class="col-sm-1" style="padding-top: 1%;color: red;">${parseFloat(value.estados[0].valor).toFixed(2)}</div>`
-                }
-                else{
-                    valorActual = `<div class="col-sm-1" style="padding-top: 1%;color: blue;">${parseFloat(value.estados[0].valor).toFixed(2)}</div>`
-                }
+            //         $("#modal_variable_componente_cuerpo").append(`
+            // <div class="row">
+            //     <div class="col-sm-4" style="padding-top: 1%;">${value.nombre}</div>
+            //     <div class="col-sm-1" style="padding-top: 1%;">${value.max}</div>
+            //     <div class="col-sm-1" style="padding-top: 1%;">${value.min}</div>
+            //     <div class="col-sm-1" style="padding-top: 1%;">${value.optimo}</div>
+            //     <div class="col-sm-2" style="padding-top: 1%;color: ${color};">${parseFloat(value.estados[0].valor).toFixed(2)}</div>
+            //     <div class="col-sm-3">
+            //         <div class="input-group">
+            //             <input id="inp_update_variable_${value.id}" value="${value.optimo}" onfocusout="componente.actualizaEstadoVariable('${mitabla[sala.activa].row(this).data()}', '${value.id}')" type="text" class="form-control" aria-label="...">
+            //         </div><!-- /input-group -->
 
-                $("#modal_variable_componente_cuerpo").append(`
-                    <div class="row">
-                        <div class="col-sm-4" style="padding-top: 1%;">${value.nombre}</div>
-                        <div class="col-sm-1" style="padding-top: 1%;">${value.max}</div>
-                        <div class="col-sm-1" style="padding-top: 1%;">${value.min}</div>
-                        <div class="col-sm-1" style="padding-top: 1%;">${value.optimo}</div>
-                        ${valorActual}
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <input id="inp_update_variable_${value.id}" type="text" class="form-control" aria-label="...">
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> 
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li>
-                                            <a onclick="variable.nuevoEstadoVariable('${value.id}', '${fila.id}', 'false')">Actualizar</a>
-                                        </li>
-                                        <li role="separator" class="divider"></li>                                        
-                                        <li>
-                                            <a onclick="nuevoEstadoVariable('${value.id}', '${fila.id}', 'true')">Actualizar y Reportar</a>
-                                        </li>
-                                    </ul>
-                                </div><!-- /btn-group -->
-                            </div><!-- /input-group -->
+            //     </div>
+            // </div>`
+            //         );
+            //         // $(`#inp_update_variable_${value.id}`).attr('idVariable', `${value.id}`);
 
-                        </div>
-                    </div>`
-                );
-            })        
+
+            //     }
+            // })
 
             $('#modal_variable_componente').modal('show');
+
+
+
         });
+
     };
 
-    // Methods
+    // Dibuja los componentes por DC
     drawByDC(e) {
-        if (e=="false" || e == ""){
+        if (e == "false" || e == "") {
             return;
         }
-        else{
-            var objComponente = JSON.parse(e);
-            var mitabla = [];
+        else {
 
-            if ( !document.getElementById(`tb_${objComponente[0].idDataCenter}`) ){
-                alert( "no existe Sala" );
+
+            objComponente = JSON.parse(e);
+            mitabla = [];
+
+            if (!document.getElementById(`tb_${objComponente[0].idDataCenter}`)) {
+                alert("no existe Sala");
             }
-            else{
+            else {
                 $(`#tb_${objComponente[0].idDataCenter}`).empty();
-                mitabla = $(`#tb_${objComponente[0].idDataCenter}`).DataTable({
+                mitabla[objComponente[0].idDataCenter] = $(`#tb_${objComponente[0].idDataCenter}`).DataTable({
                     data: objComponente,
                     destroy: true,
                     "language": {
                         "infoEmpty": "Sin Productos Ingresados",
-                        "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
                         "emptyTable": "Sin Productos Ingresados",
                         "search": "Buscar",
                         "zeroRecords": "No hay resultados",
@@ -374,7 +346,7 @@ class Componente {
                         }
                     },
                     "order": [[1, "desc"]],
-                    columns: [                 
+                    columns: [
                         {
                             title: "Acción",
                             "searchable": false,
@@ -388,24 +360,24 @@ class Componente {
                             data: "id",
                             visible: false,
                             searchable: false
-                        },              
+                        },
                         {
                             title: "nombreComponente",
                             data: "nombre",
                             // "width": "40%",
                             visible: true
-                        },    
+                        },
                         {
                             title: "Estado Anterior",
                             data: "estado",
                             className: "center"
-                        },          
+                        },
                         {
                             title: "idSala",
                             data: "idSala",
                             visible: false,
                             searchable: false
-                        }, 
+                        },
                         {
                             title: "Nuevo Estado",
                             "searchable": false,
@@ -419,80 +391,73 @@ class Componente {
             }
         }
 
+        if (primerSala == true) {
+            $(`#tb_${objComponente[0].idDataCenter} tbody`).on('click', 'tr', function () {
+                objComponente;
+                mitabla[objComponente[0].idDataCenter].rows;
 
-        $(`#tb_${objComponente[0].idDataCenter} tbody`).on( 'click', 'tr', function () {
-            objComponente;
-            mitabla.rows;
-
-            if ( $(this).hasClass('selected') ) {
-                $(this).removeClass('selected');
-            }
-            else {
-                mitabla.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            }
-
-            var fila = mitabla.row(this).data();
-            
-            $("#modal_variable_componente_titulo").html(fila.nombre);
-            $("#modal_variable_componente_cuerpo").empty();
-            $("#modal_variable_componente_cuerpo").append(`
-                <div class="row">
-                    <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Max</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Min</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
-                    <div class="col-sm-1" style="font-weight: bold;">Anterior</div>
-                    <div class="col-sm-4" style="font-weight: bold;">Nuevo Valor</div>
-                </div>
-                <hr>`
-            );
-                    
-            $.each( fila.variables, function( key, value ) {
-                var valorActual = "";
-                if (value.estados[0].valor > value.max || value.estados[0].valor < value.min ){ 
-                    valorActual = `<div class="col-sm-1" style="padding-top: 1%;color: red;">${parseFloat(value.estados[0].valor).toFixed(2)}</div>`
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
                 }
-                else{
-                    valorActual = `<div class="col-sm-1" style="padding-top: 1%;color: blue;">${parseFloat(value.estados[0].valor).toFixed(2)}</div>`
+                else {
+                    mitabla[objComponente[0].idDataCenter].$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
                 }
 
+                var fila = mitabla[objComponente[0].idDataCenter].row(this).data();
+
+                $("#modal_variable_componente_titulo").html(fila.nombre);
+                $("#modal_variable_componente_cuerpo").empty();
                 $("#modal_variable_componente_cuerpo").append(`
                     <div class="row">
+                        <div class="col-sm-4" style="font-weight: bold;">Nombre del Item</div>
+                        <div class="col-sm-1" style="font-weight: bold;">Max</div>
+                        <div class="col-sm-1" style="font-weight: bold;">Min</div>
+                        <div class="col-sm-1" style="font-weight: bold;">Optimo</div>
+                        <div class="col-sm-1" style="font-weight: bold;">Anterior</div>
+                        <div class="col-sm-4" style="font-weight: bold;">Nuevo Valor</div>
+                    </div>
+                    <hr>`
+                );
+
+                $.each(fila.variables, function (key, value) {
+                    var color = "";
+                    if (value.estados.length > 0) {
+                        if (value.estados[0].valor > value.max || value.estados[0].valor < value.min) {
+                            color = `red`
+                        }
+                        else {
+                            color = `blue`
+                        }
+
+                        $("#modal_variable_componente_cuerpo").append(`
+                        <div class="row">
                         <div class="col-sm-4" style="padding-top: 1%;">${value.nombre}</div>
                         <div class="col-sm-1" style="padding-top: 1%;">${value.max}</div>
                         <div class="col-sm-1" style="padding-top: 1%;">${value.min}</div>
                         <div class="col-sm-1" style="padding-top: 1%;">${value.optimo}</div>
-                        ${valorActual}
-                        <div class="col-sm-4">
+                        <div class="col-sm-2" style="padding-top: 1%;color: ${color};">${parseFloat(value.estados[0].valor).toFixed(2)}</div>
+                        <div class="col-sm-3">
                             <div class="input-group">
-                                <input id="inp_update_variable_${value.id}" type="text" class="form-control" aria-label="...">
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> 
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li>
-                                            <a onclick="variable.nuevoEstadoVariable('${value.id}', '${fila.id}', 'false')">Actualizar</a>
-                                        </li>
-                                        <li role="separator" class="divider"></li>                                        
-                                        <li>
-                                            <a onclick="nuevoEstadoVariable('${value.id}', '${fila.id}', 'true')">Actualizar y Reportar</a>
-                                        </li>
-                                    </ul>
-                                </div><!-- /btn-group -->
+                                <input id="inp_update_variable_${value.id}" value="${value.optimo}" type="text" class="form-control" aria-label="...">
                             </div><!-- /input-group -->
-
+    
                         </div>
                     </div>`
-                );
-            })        
+                        );
+                    }
+                })
 
-            $('#modal_variable_componente').modal('show');
-        });
+                $('#modal_variable_componente').modal('show');
+            });
+        }
+
+
+
+        tableActive = objComponente[0].idDataCenter;
     };
 
-    clear(){
+    clear() {
         $("#nombreComponente").val('');
         $("#dataCenters").val('');
         $("#salas").val('');
@@ -508,8 +473,7 @@ class Componente {
             return false;
         });
         //NProgress
-        $(function()
-        {
+        $(function () {
             $(document)
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
@@ -518,5 +482,42 @@ class Componente {
 
 
 }
+$(document).ready(function () {
+
+    $("#btn_crea_inputs_reporte").click(function () {
+        
+        $(".panel_reportes").append(
+            `<div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Temperatura
+                            fuera de rango</a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="comment">Causa:</label>
+                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="comment">Solución:</label>
+                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        );
+    });
+});
+
+
 
 let componente = new Componente();
+var objSalas = [];
+var mitabla = [];
+var tableActive;

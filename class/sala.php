@@ -30,9 +30,9 @@ if( isset($_POST["action"])){
 class Sala{
     //Componente
     public $id="";
-    public $idSala="";
     public $idDataCenter="";
     public $nombre=null;
+    public $componentes=[];
 
 
     function __construct(){
@@ -49,7 +49,6 @@ class Sala{
             require_once("UUID.php");
             
             $this->id= $obj["id"] ?? UUID::v4();
-            $this->idSala= $obj["idSala"] ?? null; 
             $this->nombre= $obj["nombre"] ?? null;
             $this->idDataCenter= $obj["idDataCenter"] ?? null;
         }

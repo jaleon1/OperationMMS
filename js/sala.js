@@ -1,15 +1,17 @@
 class Sala {
     // Constructor
-    constructor(id, idDataCenter, nombre) {
+    constructor(id, idDataCenter, nombre, activa, ultima) {
         this.id = id || null;
         this.idDataCenter = idDataCenter || '';
         this.nombre = nombre || '';
+        this.activa = activa || null;
+        this.ultima = ultima || false;
     }
 
     //Getter
     get ReadbyDC() {
         var miAccion = 'ReadbyDC';
-        
+
         $.ajax({
             type: "POST",
             url: "class/sala.php",
@@ -50,12 +52,12 @@ class Sala {
     ShowItemDataDC(e) {
         // carga objeto.
         var data = JSON.parse(e);
-        $.each(data, function(i) {
+        $.each(data, function (i) {
             $('#dataCenters').append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
         });
     };
 
-    get create(){
+    get create() {
         $('#btnGuardarSala').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'create' : 'update';
         this.nombre = $("#nombreDataCenter").val();
@@ -80,55 +82,58 @@ class Sala {
                 sala.clear();
                 $('#btnGuardarSala').attr("disabled", false);
             });
-        
+
     }
 
     // Methods
     draw(e) {
+
         var objSala = JSON.parse(e);
 
-        
         $("#lbl_dc").empty();
         $("#lbl_dc").append(objSala[0].nombreDataCenter);
 
         $("#lst_DC").empty();
         $("#tab-panel-salas").empty();
-        $.each( objSala, function( key, itemSala ) {
-            var nomSala= itemSala.nombre.replace(/ /g, "")
-            if (key == 0){
-                $('#lst_Salas').append(`<li class="active"><a href="#tab_${itemSala.id}" data-toggle="tab">${itemSala.nombre}</a></li>`);
+
+        $.each(objSala, function (key, itemSala) {
+            var nomSala = itemSala.nombre.replace(/ /g, "")
+            if (key == 0) {
+                $('#lst_Salas').append(`<li class="active sala" data-idsala="${itemSala.id}" ><a href="#tab_${itemSala.id}" data-toggle="tab">${itemSala.nombre}</a></li>`);
 
                 $('#tab-panel-salas').append(`<div class="tab-pane fade in active" id="tab_${itemSala.id}">            
                     <div class="x_content">
                         <div class="table-responsive">
-                            <table id="tb_${itemSala.id}" class="table table-striped jambo_table bulk_action">
+                            <table id="tb_${itemSala.id}" class="table table-striped jambo_table bulk_action tb_componentes">
                                 
                             </table>                            
                         </div>
                     </div>
                 </div>`);
-            }else{
-                $('#lst_Salas').append(`<li><a href="#tab_${itemSala.id}" data-toggle="tab">${itemSala.nombre}</a></li>`);
+            } else {
+                $('#lst_Salas').append(`<li class="sala" data-idsala="${itemSala.id}" ><a href="#tab_${itemSala.id}" data-toggle="tab">${itemSala.nombre}</a></li>`);
 
                 $('#tab-panel-salas').append(`<div class="tab-pane fade" id="tab_${itemSala.id}">            
                     <div class="x_content">
                         <div class="table-responsive">
-                            <table id="tb_${itemSala.id}" class="table table-striped jambo_table bulk_action" style="width: 100%;">
+                            <table id="tb_${itemSala.id}" class="table table-striped jambo_table bulk_action tb_componentes" style="width: 100%;">
                                 
                             </table>
                         </div>
                     </div>
                 </div>`);
             }
-
-            sala.id = itemSala.id;
-            componente.ReadbySala;    
             
-        });
+        });        
+        componente.ReadbySala;
         
+        $('#lst_Salas li a').click(function(e) {
+            e.preventDefault();            
+            sala.activa = $(this).parent().data().idsala;
+        })
     };
 
-    clear(){
+    clear() {
         $("#nombreDataCenter").val('');
         $("#dataCenters").val('');
     }
@@ -143,8 +148,7 @@ class Sala {
             return false;
         });
         //NProgress
-        $(function()
-        {
+        $(function () {
             $(document)
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
