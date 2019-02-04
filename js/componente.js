@@ -228,7 +228,11 @@ class Componente {
 
 
         $(`table tbody tr`).on('click', 'td', function () {
-            
+            for (let i = 0; i < componente.arrayComponentes; i++) {
+                if (arrayComponentes[i].reportesComponente) {
+                    alert("prueba");
+                }
+            }
             $(".panel_reportes").empty();//Limpia el cuerpo del modal para cargar los eventos
 
             if ($(this).hasClass('selected')) {
@@ -260,6 +264,8 @@ class Componente {
 
 
             $("#modal_variable_componente_titulo").html(fila.nombre);
+            componente.id = fila.id;
+            componente.dataCenter = componente.getParameterByName('id');
             // $("#modal_variable_componente_cuerpo").empty();
             // $("#modal_variable_componente_cuerpo").append(`
             //     <div class="row">
@@ -463,6 +469,13 @@ class Componente {
         $("#salas").val('');
     }
 
+    getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
     Init() {
         var validator = new FormValidator({ "events": ['input']['select'] }, document.forms["frmComponentes"]);
         $('#frmComponentes').submit(function (e) {
@@ -485,34 +498,52 @@ class Componente {
 $(document).ready(function () {
 
     $("#btn_crea_inputs_reporte").click(function () {
-        
+        var fechaReporte = Math.round(new Date().getTime()/1000);
+        arrayFechaReporte.push(fechaReporte);
+
+        var titulo = $("#tituloReporte").val();
         $(".panel_reportes").append(
-            `<div class="panel panel-default">
+            `<div id="reporte${fechaReporte}" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Temperatura
-                            fuera de rango</a>
+                        <a id="titulo_${componente.id + "_" + fechaReporte}" data-toggle="collapse" data-parent="#accordion" href="#titulo_${fechaReporte}">${titulo}</a>
                     </h4>
+                    <button id="remove${fechaReporte}" type="button" class="btn btn-round btn-info" >X</button>
                 </div>
-                <div id="collapse1" class="panel-collapse collapse">
+                <div id="titulo_${fechaReporte}" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="comment">Causa:</label>
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                                <textarea id="causa_${componente.id + "_" + fechaReporte}" class="form-control" rows="5" id="comment"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="comment">Solución:</label>
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                                <textarea id="solucion_${componente.id + "_" + fechaReporte}" class="form-control" rows="5" id="comment"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>`
         );
+        $("#tituloReporte").val('');
     });
+
+    $("#btn_guarda_estado_componente").click(function () {
+        
+        $.each(arrayFechaReporte, function( index, value ) {
+            reportesComponente.dataCenter = componente.dataCenter;
+            reportesComponente.id= componente.id;
+            reportesComponente.titulo=$("#titulo_"+ componente.id + "_" + value).text();
+            reportesComponente.causa=$("#causa_"+ componente.id + "_" + value).val();
+            reportesComponente.solucion=$("#solucion_"+ componente.id + "_" + value).val();
+            reportesComponente.fecha=value;
+            arrayComponentes.push(reportesComponente); 
+        });
+    });
+
 });
 
 
@@ -521,3 +552,6 @@ let componente = new Componente();
 var objSalas = [];
 var mitabla = [];
 var tableActive;
+var arrayComponentes = [];
+var reportesComponente  = new Object;
+var arrayFechaReporte = [reportesComponente];
