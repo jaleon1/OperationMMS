@@ -507,8 +507,9 @@ $(document).ready(function () {
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a id="titulo_${componente.id + "_" + fechaReporte}" data-toggle="collapse" data-parent="#accordion" href="#titulo_${fechaReporte}">${titulo}</a>
+                        <button id="remove${fechaReporte}" type="button" class="btn btn-round btn-info navbar-right" style="margin-top: -0.9%;">X</button>
                     </h4>
-                    <button id="remove${fechaReporte}" type="button" class="btn btn-round btn-info" >X</button>
+                    
                 </div>
                 <div id="titulo_${fechaReporte}" class="panel-collapse collapse">
                     <div class="panel-body">
@@ -540,7 +541,7 @@ $(document).ready(function () {
             reportesComponente.causa=$("#causa_"+ componente.id + "_" + value).val();
             reportesComponente.solucion=$("#solucion_"+ componente.id + "_" + value).val();
             reportesComponente.fecha=value;
-            arrayComponentes.push(reportesComponente); 
+            arrayComponentes.push(reportesComponente);
         });
     });
 
